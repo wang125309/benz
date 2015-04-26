@@ -1,0 +1,24 @@
+{
+  "name": "benz",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wang125309/benz",
+  "authors": [
+    "wang_125309 <wang_125309@foxmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "normalize.css": "~3.0.2",
+    "velocity": "~1.2.1",
+    "zepto": "~1.1.6",
+    "jquery-ui": "~1.11.4",
+    "zeptojs": "~1.1.6"
+  }
+}

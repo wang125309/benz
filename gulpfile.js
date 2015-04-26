@@ -61,7 +61,7 @@ gulp.task('sass',function(){
         .pipe(gulp.dest('./assets/css'));
 });
 
-var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList'];
+var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','spot/login'];
 
 gulp.task('js',function(){
     for (i in js_files_backend) {

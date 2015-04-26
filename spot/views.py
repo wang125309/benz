@@ -4,10 +4,11 @@ from django.http import JsonResponse,HttpResponseRedirect
 import json
 import requests
 import logging
-from models import *
+from backend.models import *
 import datetime
 from functools import wraps
 import sys
+
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 
@@ -16,19 +17,13 @@ logger = logging.getLogger(__name__)
 appid = "wx91e4c1925de9ff50"
 secret = "f2f564ea79ff43f7ed3004821ac3b2b8"
 
-def createSession(user):
-    if not request.session.get(user,False):
-        request.session['spot_user'] = user
-    else:
-        return False
-    return True
-
 def loginNeed(func):
     def _loginNeed(request):
         if not request.session.get("spot_user",False):
-            return HttpResponseRedirect("/spot/login/")
+            return HttpResponseRedirect("/benz/spot/login/")
         else:
             return func(request)
+    return _loginNeed
 
 def quitAction(request):
     if not request.session.get("spot_user",False):
@@ -42,34 +37,38 @@ def quitAction(request):
         })
 
 def loginAction(request):
-    user = request.GET['spot_user']
-    password = request.GET['password']
+    user = request.POST['username']
+    password = request.POST['password']
     try:
         u = User.objects.get(username=user)
         if(u.password == password):
-            createSession(user)
+            request.session['spot_user'] = u.username
         else :
             return JsonResponse({
-                "status":"wrong password"
+                "status":"fail",
+                "reason":u"密码错误"
             })
         return JsonResponse({
             "status":"success"
         })
     except Exception,e:
         return JsonResponse({
-            "status":"fail"
+            "status":"fail",
+            "reason":str(e)
         })
 
 def login(request):
-    return render(request,"spot/login.html")
-
-@loginNeed
-def index(request):
-    return render(request,"spot/index.html")
+    if request.session.get('spot_user',False):
+        return HttpResponseRedirect("/benz/spot/chooseList/")
+    else:
+        return render(request,"spot/login.html")
 
 @loginNeed
 def chooseList(request):
-    return render(request,"spot/chooseList.html")
+    t = Task.objects.all()
+    return render(request,"spot/chooseList.html",{
+        "taskList":t
+    })
 
 @loginNeed
 def chooseTask(request):

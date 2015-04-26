@@ -16,8 +16,8 @@ sys.setdefaultencoding('UTF-8')
 
 # Create your views here.
 logger = logging.getLogger(__name__)
-appid = "wx91e4c1925de9ff50"
-secret = "f2f564ea79ff43f7ed3004821ac3b2b8"
+appid = "wxd4f684d8f3edc620"
+secret = "5b361b69fb998e0db1be2d873ed85326"
 
 def loginNeed(func):
     def _loginNeed(request):

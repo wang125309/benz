@@ -1,0 +1,21 @@
+$(function(){
+    $.post("/benz/portal/wxconfig/",{
+		"url":location.href
+	},
+	function(data){
+		wx.config(data);
+		wx.ready(function(){
+            wx.hideOptionMenu();
+        });
+		wx.error(function(res){
+			$.post("/wxconfig/",{
+				"url":location.href
+			},function(data){
+				wx.config(data);
+				wx.ready(function(){
+                    wx.hideOptionMenu();
+				});
+			});
+		});
+	});
+});

@@ -1,5 +1,5 @@
 $(function(){
-    $.post("/nabob/wxconfig/",{
+    $.post("/portal/wxconfig/",{
 		"url":location.href
 	},
 	function(data){
@@ -13,22 +13,6 @@ $(function(){
                 }
 		        wx.ready(function(){
                     wx.hideOptionMenu();
-			        wx.onMenuShareTimeline({
-                        link:link,
-                        imgUrl:"http://www.360youtu.com/nabob/static/image/share.jpg",
-                        title:"大学生！不！看！后！悔！一大波压岁钱和苹果机来袭……",
-                        success: function(){
-				         
-                        },
-			        });
-			        wx.onMenuShareAppMessage({
-                        link:link,
-                        imgUrl:"http://www.360youtu.com/nabob/static/image/share.jpg",
-                        title:"大学生！不！看！后！悔！一大波压岁钱和苹果机来袭……",
-                        desc:"这个发给同学，TA会感激你",
-				        success:function(){
-                        },
-			        });
                 });
             });
         });
@@ -39,17 +23,7 @@ $(function(){
 				},function(data){
 					wx.config(data);
 					wx.ready(function(){
-						wx.onMenuShareTimeline({
-							success:function(){
-
-							},
-					    });
-						wx.onMenuShareAppMessage({
-							success:function(){
-
-							},
-						});
-							
+                        wx.hideOptionMenu();
 					});
 				});
 			});

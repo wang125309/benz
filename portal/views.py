@@ -21,10 +21,13 @@ secret = "5b361b69fb998e0db1be2d873ed85326"
 
 def loginNeed(func):
     def _loginNeed(request):
-        if not request.session.get("phone",False):
-            return HttpResponseRedirect("/benz/portal/login/")
+        if not request.session.get("openid",False):
+            return HttpResponseRedirect("/benz/portal/wx_login_portal/")
         else:
-            return func(request)
+            if not cache.get(request.session['openid'],False):
+                return HttpResponseRedirect("/benz/portal/login/")
+            else:
+                return func(request)
     return _loginNeed
 
 def need_login(func):
@@ -40,25 +43,29 @@ def need_login(func):
                     u.save()
                 return func(request)
             else:
-                if request.GET.get("openid",False):
-                    return HttpResponseRedirect("/benz/login/?openid="+request.GET['openid'])
-                return HttpResponseRedirect("/benz/login/") 
+                return HttpResponseRedirect("/benz/portal/wx_login_portal/") 
         else:
             return func(request)
     return _need_login
 
+def wx_login_portal(request):
+    if request.session.get("openid",False):
+        return HttpResponseRedirect("/benz/portal/login/")
+    else :
+        return HttpResponseRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri=http%3A%2F%2Fbenz.wxpages.com%2Fbenz%2Fportal%2Flogin%2F&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");    
+
 def loginAction(request):
-    if(request.session.get("phone",False)):
+    if cache.get(request.session['openid']):
         return HttpResponseRedirect("/benz/portal/portal/")
     else :
-        request.session['phone'] = request.GET['phone']
-        cache.set(request.session['phone'],request.GET['username'], settings.NEVER_REDIS_TIMEOUT)
+        cache.set(request.session['openid'],json.dumps({'username':request.GET['username'],'phone':request.GET['phone']}), settings.NEVER_REDIS_TIMEOUT)
         return JsonResponse({
             "status":"success"
         })
 
+@need_login
 def login(request):
-    if request.session.get("phone",False):
+    if cache.get(request.session['openid']):
         return HttpResponseRedirect("/benz/portal/portal/")
     else :
 	    return render(request,"portal/login.html")
@@ -117,14 +124,14 @@ def mapMode(request):
 
 def wxconfig(request):
 	url = request.POST['url']
-	js_ticket = Wx.objects.get(id=1).js_ticket
+	js_ticket = cache.get('js_ticket')
 	s = sign(js_ticket,url)
 	json = {
 		"appId":appid,
 		"timestamp":s['timestamp'],
 		"nonceStr":'nameLR9969',
 		"signature":s['hash'],
-		"jsApiList":['onMenuShareAppMessage','onMenuShareTimeline']
+		"jsApiList":['onMenuShareAppMessage','onMenuShareTimeline','scanQRCode']
 	}
 	return JsonResponse(json)
 

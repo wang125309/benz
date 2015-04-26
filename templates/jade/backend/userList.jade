@@ -1,0 +1,68 @@
+include ./lib/header.jade
+link(href="{{ STATIC_URL }}css/backend/userList.css",rel="stylesheet",type="text/css")
+div.subheader.clearfix
+    div.left-area.clearfix
+        {% if userPri == '2' %}
+        div.btn#addUser 增加人员
+        {% endif %}
+    div.right-area.clearfix
+        div.btn#changePassword 修改密码
+        div.btn#quit 退出
+div.main
+    div.table-user
+        table.tbl
+            th 编号
+            th 姓名
+            th 当前权限
+            {% if userPri == '2' %}
+            th 操作
+            {% endif %}
+            {% for i in user %}
+            tr
+                td {{ i.id }}
+                td {{ i.username }}
+                td {% if i.pri == '2' %}管理员{% else %}现场成员{% endif %}
+                {% if userPri == '2' %}
+                td 
+                    a(href="javascript:;",class="opt",data-id="{{ i.id }}") 编辑
+                    a(href="javascript:;",class="del",data-id="{{ i.id }}") 删除
+                    {% endif %}
+            {% endfor %}
+div.menu#del-menu
+    div.title 删除成员
+    div.menu-inner
+        div.line 
+            span.first 确认要删除成员
+            span.name=""
+            span.last 吗？
+        div.btn-line.clearfix
+            div.btn-area
+                div.btn.delete.clearfix 删除
+                div.btn.cancel.clearfix 取消
+
+div.menu#edit-user
+    div.title 增加人员/修改信息
+    div.menu-inner
+        div.username.first.clearfix
+            div.left-area.clearfix 用户名：
+            div.right-area 
+                input#username(type="text")
+        div.password.second.clearfix
+            div.left-area.clearfix 密  码：
+            div.right-area
+                input#password(type="password")
+        div.priv
+            div.left-area.clearfix 权  限：
+            div.right-area
+                div.radio
+                    input#normal(type="radio",name="usertype")
+                    label(for="normal") 现场人员
+                div.radio
+                    input#controller(type="radio",name="usertype")
+                    label(for="controller") 管理员
+        div.btn-line.clearfix
+            div.btn-area
+                div.btn.save.clearfix 保存
+                div.btn.cancel.clearfix 取消
+script(language="javascript",src="{{ STATIC_URL }}js/backend/userList.min.js")
+

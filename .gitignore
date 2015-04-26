@@ -1,0 +1,5 @@
+venv/
+bower_components/
+node_modules/
+logs/
+nohup.out

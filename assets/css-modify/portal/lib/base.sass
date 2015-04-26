@@ -1,0 +1,56 @@
+@import "../../../../bower_components/normalize.css/normalize.css";
+$background:#cecece;
+$border:#dcdcdc;
+$fontBlack:#333;
+@font-face {
+  font-family:benz;
+  src:url('../../benz.ttf');
+}
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.clearfix   {
+  display:inline-table;
+  height:1%;
+  display:block;
+}
+.title-banner {
+  z-index:1;
+  top:0;
+      width:100%;
+      .title-background {
+        background:url("/static/image/p2-benz-logo.png") no-repeat;
+        background-size:150% auto;
+        background-position:center center;
+        width:60vw;
+        height:20vw;
+        left:20vw;
+        float:left;
+        position:fixed;
+        transition:background-size 0.5s;
+      }
+      .left-menu {
+        background:url("/static/image/banner-menu-icon.jpg") no-repeat;
+        background-size:100% auto;
+        float:left;
+        width:20vw;
+        height:20vw;
+        background-position:center center;
+      }
+      .right-number {
+        background:url("/static/image/right-number-icon.jpg") no-repeat;
+        background-size:100% auto;
+        float:right;
+        width:20vw;
+        height:20vw;
+        background-position:center center;
+      }
+        height:20vw;
+      background-color:#333;
+      position:fixed;
+}

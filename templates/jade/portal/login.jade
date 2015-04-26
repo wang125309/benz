@@ -1,0 +1,14 @@
+include ./lib/header.jade
+    script(language="javascript",src="/static/js/portal/login.min.js")
+    link(href="/static/css/portal/login.css",rel="stylesheet",type="text/css")
+    body
+        section#header=""
+        section#body
+            div.title 请输入您的信息以获得本次活动的[体验号]
+            div.phone
+                input(type="text",placeholder="请点击这里输入您的手机号")
+            div.name
+                input(type="text",placeholder="请点击这里输入您的姓名")
+            div.challenge-icon=""
+        section#bottom
+            div.submit-btn="" 

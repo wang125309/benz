@@ -1,0 +1,61 @@
+include ./lib/header.jade
+link(href="{{ STATIC_URL }}css/backend/taskList.css",rel="stylesheet",type="text/css")
+div.subheader.clearfix
+    div.left-area.clearfix
+        {% if userPri == '2' %}
+        div.btn#addTask 增加场次
+        {% endif %}
+    div.right-area.clearfix
+        div.btn#changePassword 修改密码
+        div.btn#quit 退出
+div.main
+    div.table-user
+        table.tbl
+            th 活动编号
+            th 活动列表
+            th 活动日期
+            {% if userPri == '2' %}
+            th 操作
+            {% endif %}
+            {% for i in taskList %}
+            tr
+                td {{ i.id }}
+                td {{ i.taskname }}
+                td {{ i.taskdate }}
+                {% if userPri == '2'  %}
+                td 
+                    a(href="javascript:;" class="opt" data-id="{{ i.id }}") 编辑
+                    a(href="javascript:;" class="del" data-id="{{ i.id }}") 删除
+                {% endif %}
+            {% endfor %}
+div.menu#del-menu
+    div.title 删除
+    div.menu-inner
+        div.line 
+            span.first 确认要删除活动
+            span.name=""
+            span.last 吗？
+        div.btn-line.clearfix
+            div.btn-area
+                div.btn.delete.clearfix 删除
+                div.btn.cancel.clearfix 取消
+div.menu#edit-task
+    div.title 增加活动/修改活动
+    div.menu-inner
+        div.username.first.clearfix
+            div.left-area.clearfix 活动名称：
+            div.right-area 
+                input#taskname(type="text")
+        div.password.second.clearfix
+            div.left-area.clearfix 活动日期：
+            div.right-area
+                input#taskdate(type="text")
+        div.password.second.clearfix
+            div.left-area.clearfix 活动城市：
+            div.right-area
+                input#taskcity(type="text")
+        div.btn-line.clearfix
+            div.btn-area
+                div.btn.save.clearfix 保存
+                div.btn.cancel.clearfix 取消
+script(src="/static/js/backend/taskList.min.js")

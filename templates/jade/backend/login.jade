@@ -1,0 +1,15 @@
+script(language="javascript",src="{{ STATIC_URL }}js/backend/login.min.js")
+link(href="{{ STATIC_URL }}css/backend/login.css",rel="stylesheet",type="text/css")
+body
+    div.login
+        div.login-wrap
+            div.username
+                div.user.login-left 用户名：
+                div.user-input
+                    input.userinput(type="text",name="user")
+            div.password
+                div.passwd.login-left 密码：
+                div.password-input
+                    input.passwordinput(type="password",name="password")
+            div.login-btn
+                button.btn 登录

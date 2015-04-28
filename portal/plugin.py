@@ -2,6 +2,7 @@ from models import *
 from django.http import JsonResponse,HttpResponseRedirect
 import random
 import json
+from django.conf import settings
 import requests
 import logging
 import time
@@ -13,15 +14,13 @@ address = 'benz'
 def wx_login(appid,secret,code):
 	r = requests.get("https://api.weixin.qq.com/sns/oauth2/access_token?appid="+appid+"&secret="+secret+"&code="+code+"&grant_type=authorization_code", verify=False)
 	access_res = r.json()
-	#r = requests.get("https://api.weixin.qq.com/sns/oauth2/refresh_token?appid="+appid+"&grant_type=refresh_token&refresh_token="+access_res['refresh_token'])
-	#access_res = r.json()
 	r = requests.get("https://api.weixin.qq.com/sns/userinfo?access_token="+access_res['access_token']+"&openid="+access_res['openid']+"&lang=zh_CN", verify=False)
 	r.encoding = 'utf8'
 	return r.json()
 def get_access_token(appid,secret):
 	r = requests.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+secret, verify=False)
 	res = r.json()
-	cache.set("access_token",res['access_token'])
+	cache.set("access_token",res['access_token'],settings.NEVER_REDIS_TIMEOUT)
 	return res['access_token']
 def get_js_ticket(access_token,appid,secret):
 	r = requests.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi", verify=False)
@@ -30,10 +29,10 @@ def get_js_ticket(access_token,appid,secret):
 		access_token = get_access_token(appid,secret)
 		r = requests.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi", verify=False)
 		res = r.json()
-		cache.set('js_ticket', res['ticket'])
+		cache.set('js_ticket', res['ticket'],settings.NEVER_REDIS_TIMEOUT)
 		return res['ticket']
 	else:
-		cache.set('js_ticket', res['ticket'])
+		cache.set('js_ticket', res['ticket'],settings.NEVER_REDIS_TIMEOUT)
 		return res['ticket']
 def sign(js_ticket,url):
 	s = "nameLR9969"

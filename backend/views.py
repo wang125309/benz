@@ -3,8 +3,12 @@ from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseRedirect
 import json
 import requests
+from django.conf import settings
+from django.core.cache import cache
+
 import logging
 from models import *
+from portal.models import User as portalUser
 import datetime
 import sys
 import time
@@ -105,8 +109,28 @@ def loginAction(request):
         })
 
 @loginNeed
-def index(request):
-    return render(request,"backend/index.html")
+def problem(request):
+    if request.GET.get("id",False):
+        id = request.GET['id']
+        if int(id) > 82:
+            return HttpResponseRedirect("/benz/backend/problem/?id=1")
+        try:
+            p = Problem.objects.get(id=id)
+            return render(request,"backend/problem.html",{
+                "id":id,
+                "problem":p.problem,
+                "A":p.A,
+                "B":p.B,
+                "C":p.C,
+                "D":p.D
+            })
+        except Exception,e:
+            return JsonResponse({
+                "status":"fail",
+                "reason":"没有此题目"
+            })
+    else :
+        return HttpResponseRedirect("/benz/backend/userList/")
 
 @loginNeed
 def userList(request):
@@ -182,6 +206,27 @@ def deleteTask(request):
         })
 
 @loginNeed
+def getProblemId(request):
+    if cache.get("problemId") and cache.get("problemId") < "83":
+        return JsonResponse({
+            "status":"success",
+            "problemId":cache.get("problemId")
+        })
+    else :
+        cache.set("problemId",1,settings.NEVER_REDIS_TIMEOUT)
+        return JsonResponse({
+            "status":"success",
+            "problemId":1
+        })
+
+@loginNeed
+def setProblemId(request):
+    cache.set("problemId",request.GET['id'],settings.NEVER_REDIS_TIMEOUT)
+    return JsonResponse({
+        "status":"success"
+    })
+
+@loginNeed
 def userSource(request):
     u = User.objects.all()
     res = []
@@ -243,6 +288,22 @@ def taskList(request):
     })
 
 @loginNeed
+def sign(request):
+    users = portalUser.objects.all().order_by("-id")[0:10].reverse()
+    return render(request,"backend/sign.html",{
+        "user":users
+    })
+
+@loginNeed
+def signMessage(request):
+    users = portalUser.objects.all()
+    u = []
+    for i in users:
+        u.append({"nickname":i.nickname,"headimgurl":i.headimgurl})
+    return JsonResponse({
+        "user":u    
+    })
+@loginNeed
 def saveTask(request):
     taskname = request.POST['taskname']
     taskcity = request.POST['taskcity']
@@ -279,5 +340,5 @@ def saveTask(request):
         else :
             return JsonResponse({
                 "status":"fail",
-                "reason":"请输入正确的活动名称，日子和城市"
+                "reason":"请输入正确的活动名称，日期和城市"
             })

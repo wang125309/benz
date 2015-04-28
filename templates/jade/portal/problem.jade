@@ -1,0 +1,16 @@
+include ./lib/header.jade
+    link(href="/static/css/portal/problem.css",rel="stylesheet",type="text/css")
+    script(src="/static/js/portal/problem.min.js")
+    body
+        div.body
+            include ./lib/title.jade
+            div.problem-num
+                span Q
+                span.num {{ problemId }}
+            div.options
+                div.line.clearfix
+                    div.A A
+                    div.B B
+                div.line.clearfix
+                    div.C C
+                    div.D D

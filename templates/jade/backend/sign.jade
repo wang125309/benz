@@ -1,0 +1,19 @@
+doctype html
+html(lang="en")
+    head
+        meta(http-equiv="Content-Type",content="text/html",charset="utf-8")
+        script(language="javascript",src="{{ STATIC_URL }}js/backend/sign.min.js")
+        link(href="{{ STATIC_URL }}css/backend/sign.css",rel="stylesheet",type="text/css")
+body
+    div.left-wall
+        div.wall-text 签到墙
+        div.wall-data
+            {% for i in user %}
+            div.card.base-infinite.fly
+                div.avatar(style="background:url({{ i.headimgurl }})")=""
+                div.nickname {{ i.nickname }}
+            {% endfor %}
+    div.right-rank
+        div.rank-text 积分排行榜
+        div.rank-first
+        div.rank-second

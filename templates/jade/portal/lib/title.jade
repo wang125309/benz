@@ -1,5 +1,13 @@
-script(src="{{ STATIC_URL }}/js/showDetail.min.js")
+script(src="{{ STATIC_URL }}js/portal/showDetail.min.js")
 div.title-banner
     div.left-menu=""
     div.title-background=""
-    div.right-number=""
+    {% if type == 'A' %}
+    div.right-number(style="background-color:#f38001;") {{ code }}
+    {% elif type == 'B' %}
+    div.right-number(style="background-color:#0189df;") {{ code }}
+    {% elif type == 'C' %}
+    div.right-number(style="background-color:#fef900;") {{ code }}
+    {% else %}
+    div.right-number(style="background-color:#939393;") {{ code }}
+    {% endif %}

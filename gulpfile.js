@@ -61,7 +61,15 @@ gulp.task('sass',function(){
         .pipe(gulp.dest('./assets/css'));
 });
 
-var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','spot/login'];
+gulp.task('js-sign',function(){
+        gulp.src('./assets/js-modify/backend/sign.js')
+			.pipe(browserify())
+			.pipe(concat('.js'))
+            .pipe(gulp.dest('./assets/js/'))
+            .pipe(rename('backend/sign.min.js'))
+            .pipe(gulp.dest('./assets/js/'));
+});
+var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','backend/problem','spot/login','portal/showDetail','backend/sign','portal/problem'];
 
 gulp.task('js',function(){
     for (i in js_files_backend) {

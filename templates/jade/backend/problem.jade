@@ -1,2 +1,61 @@
-link(href="{{ STATIC_URL }}css/backend/taskList.css",rel="stylesheet",type="text/css")
-
+doctype html
+html(lang="en")
+    head
+        meta(http-equiv="Content-Type",content="text/html",charset="utf-8")
+        script(language="javascript",src="{{ STATIC_URL }}js/backend/problem.min.js")
+        link(href="{{ STATIC_URL }}css/backend/problem.css",rel="stylesheet",type="text/css")
+body
+    input(type="hidden",data-id="{{id}}",id="id")
+    div.time 倒计时:
+        span.num 30 
+        span.second S            
+    div.main
+        div.left-area
+            div.number Q{{ id }}
+            div.answer=""
+            div.process
+                div.process-sub.s1=""
+                div.process-sub.s2=""
+                div.process-sub.s3=""
+                div.process-sub.s4=""
+                div.process-sub.s5=""
+                div.process-sub.s6=""
+                div.process-sub.s7=""
+                div.process-sub.s8=""
+                div.process-sub.s9=""
+                div.process-sub.s10=""
+                div.process-sub.s11=""
+                div.process-sub.s12=""
+                div.process-sub.s13=""
+                div.process-sub.s14=""
+                div.process-sub.s15=""
+                div.process-sub.s16=""
+                div.process-sub.s17=""
+                div.process-sub.s18=""
+                div.process-sub.s19=""
+                div.process-sub.s20=""
+                div.process-sub.s21=""
+                div.process-sub.s22=""
+                div.process-sub.s23=""
+                div.process-sub.s24=""
+                div.process-sub.s25=""
+                div.process-sub.s26=""
+                div.process-sub.s27=""
+                div.process-sub.s28=""
+                div.process-sub.s29=""
+                div.process-sub.s30=""
+        div.main-area
+            div.problem-desc {{ problem }}
+            div.option-area
+                div.A 
+                    div.icon A
+                    span.detail {{ A }}
+                div.B
+                    div.icon B
+                    span.detail {{ B }}
+                div.C 
+                    div.icon C
+                    span.detail {{ C }}
+                div.D 
+                    div.icon D
+                    span.detail {{ D }}

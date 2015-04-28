@@ -205,9 +205,8 @@ def deleteTask(request):
             "reason":"活动id不能为0"
         })
 
-@loginNeed
 def getProblemId(request):
-    if cache.get("problemId") and cache.get("problemId") < "83":
+    if cache.get("problemId") and int(cache.get("problemId")) < 83:
         return JsonResponse({
             "status":"success",
             "problemId":cache.get("problemId")

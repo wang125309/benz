@@ -243,6 +243,16 @@ def problem(request):
         "problemId":problemId
     })
 
+def upload_position(request):
+    latitude = request.POST['latitude']
+    longitude = request.POST['longitude']
+    r = requests.get("http://api.map.baidu.com/geocoder/v2/?ak=pmCgmADsAsD9rEXkqWNcTzjd&location="+latitude+","+longitude+"&output=json&pois=1")
+    r.encoding = "utf8"
+    res = r.json()
+    print res['result']['addressComponent']['city'].encode("utf8")
+    print res['result']['addressComponent']['street'].encode("utf8")
+    return JsonResponse(r.json())
+    
 @loginNeed
 @getCode
 def result(request):

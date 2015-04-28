@@ -17,10 +17,12 @@ $(function(){
             
     });
     setInterval(function(){
-        console.log("I do");
+
         $.get("/benz/backend/getProblemId/",function(d){
             if(d.status == 'success') {
+
                 if(d.problemId != $(".num").text()) {
+
                     location.href = location.href;
                 }
             }

@@ -298,19 +298,6 @@ def result(request):
 
 
 def wxconfig(request):
-<<<<<<< HEAD
-	url = request.POST['url']
-	js_ticket = cache.get("js_ticket")
-	s = sign(js_ticket,url)
-	json = {
-		"appId":appid,
-		"timestamp":s['timestamp'],
-		"nonceStr":'nameLR9969',
-		"signature":s['hash'],
-		"jsApiList":['onMenuShareAppMessage','onMenuShareTimeline']
-	}
-	return JsonResponse(json)
-=======
     url = request.POST['url']
     js_ticket = cache.get('js_ticket')
     print js_ticket
@@ -324,7 +311,6 @@ def wxconfig(request):
     }
     print json
     return JsonResponse(json)
->>>>>>> 126d84bb57fc194303e85586809b9365115d0967
 
 def update_access_token(request):
     get_js_ticket(get_access_token(appid,secret),appid,secret)

@@ -7,5 +7,5 @@ body
         div.second-title 活动列表
         div.taskList
             {% for i in taskList %}
-            div.taskname {{ i.taskname }}
+            div(data-id="{{ i.id }}").taskname {{ i.taskname }}
             {% endfor %}

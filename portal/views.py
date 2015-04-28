@@ -117,7 +117,7 @@ def mapMode(request):
 
 def wxconfig(request):
 	url = request.POST['url']
-	js_ticket = Wx.objects.get(id=1).js_ticket
+	js_ticket = cache.get("js_ticket")
 	s = sign(js_ticket,url)
 	json = {
 		"appId":appid,

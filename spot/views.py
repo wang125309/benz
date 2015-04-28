@@ -72,7 +72,10 @@ def chooseList(request):
 
 @loginNeed
 def chooseTask(request):
-    return render(request,"spot/chooseTask.html")
+    task_id = request.GET.get('task_id')
+    return render(request,"spot/chooseTask.html", {
+        "task_id": task_id
+    })
 
 @loginNeed
 def register(request):

@@ -61,7 +61,7 @@ gulp.task('sass',function(){
         .pipe(gulp.dest('./assets/css'));
 });
 
-var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','spot/login'];
+var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','spot/login', 'spot/chooseList'];
 
 gulp.task('js',function(){
     for (i in js_files_backend) {
@@ -74,6 +74,19 @@ gulp.task('js',function(){
             .pipe(gulp.dest('./assets/js/'));
     }
 });
+
+var js_files_spot = ['chooseList', 'chooseTask'];
+gulp.task('js-spot', function(){
+    for(i in js_files_spot){
+        gulp.src('./assets/js-modify/spot/' + js_files_spot[i] + '.js')
+        .pipe(browserify())
+        .pipe(concat('.js'))
+        .pipe(gulp.dest('./assets/js/spot/'))
+        .pipe(rename(js_files_spot[i]+'.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./assets/js/spot/'));
+    }
+})
 
 gulp.task('jade-spot',function(){
     var jade_files = {};

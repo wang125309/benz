@@ -1,0 +1,271 @@
+@import "../../css/portal/lib/base.css";
+@-webkit-keyframes coner {
+  0%,100% {
+    -webkit-transform:scale(1);
+    -webkit-transform:translateY(-15px);
+    opacity:.9;
+  }
+  1%,99% {
+    -webkit-transform:translateY(-15px);
+  }
+  49% {
+    -webkit-transform:translateY(0px);
+  }
+  50% {
+    opacity:0;
+    -webkit-transform:translateY(0px);
+    -webkit-transform:scale(0.2);
+  }
+}
+body {
+  margin:0;
+}
+.body {
+  margin:0;
+  position:absolute;
+  height:100%;
+  width:100%;
+  overflow:hidden;
+    .title {
+      display:none;
+      z-index:1;
+      width:100%;
+      .title-background {
+        background:url("/static/image/p2-benz-logo.png") no-repeat;
+        background-size:150% auto;
+        background-position:center center;
+        width:60vw;
+        height:20vw;
+        left:20vw;
+        float:left;
+        position:fixed;
+        transition:background-size 0.5s;
+      }
+      .left-menu {
+        background:url("/static/image/banner-menu-icon.jpg") no-repeat;
+        background-size:100% auto;
+        float:left;
+        background-position:center center;
+      }
+      .right-number {
+        background:url("/static/image/right-number-icon.png") no-repeat;
+        background-size:100% auto;
+        float:right;
+        font-size:5vw;
+        line-height:27vw;
+        text-align:center;
+        width:0;
+        
+        color:#fff;
+        background-position:center center;
+      }
+      height:20vw;
+      background-color:#333;
+      position:fixed;
+    }
+  section.move {
+    transition:top 1s;
+    transition-timing-function: ease-in-out;
+    position:absolute;
+    height:100%;
+    width:100%;
+    .conner {
+      background:url("/static/image/coner-bottom.png") no-repeat;
+      position:absolute;
+      height:5vw;
+      bottom:5vw;
+      background-position:bottom center;
+      background-size:5vw 5vw;
+      width:100%;
+      -webkit-animation-name:coner;
+      -webkit-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      -ms-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-timing-function: linear;
+      -webkit-animation-iteration-count:infinite;
+      -webkit-animation-fill-mode: both;
+    }
+  }
+  section.page1 {
+    background:url("/static/image/banner-view.jpg") no-repeat;
+    background-size:100% auto;
+    background-position:top center;
+    background-color:#000;
+    top:0;
+    .bottom-banner-view {
+      background:url("/static/image/benz-logo-bottom.png") no-repeat;
+      background-position:top center;
+      background-size:100% auto;
+      position:absolute;
+      width:100%;
+      height:30vh;
+      bottom:15vh;
+      display:none;
+    }
+    .bottom-banner-view-text {
+      background:url("/static/image/benz-text-bottom.png") no-repeat;
+      background-position:top center;
+      background-size:100% auto;
+      position:absolute;
+      width:100%;
+      height:30vh;
+      bottom:15vh;
+      display:none;
+    }
+  }
+
+  section.page2 {
+    background:url("/static/image/p2-background.png") no-repeat;
+    background-size:100% auto;
+    background-position:top center;
+    background-color:#000;
+    top:100vh;
+
+    .p2-banner {
+      position:absolute;
+      top:20vw;
+      width:100vw;
+      height:20vh;
+      background-size:100% auto;
+      background-position:top center;
+      background:url("/static/image/p2-banner.png") no-repeat;
+    }
+
+  }
+
+  section.page3 {
+    top:200vh;
+
+    background-color:#000;
+    .p3-text {
+      top:20vw;
+      width:100%;
+
+      height:20vh;
+      position:absolute;
+      background:url("/static/image/p3-text.png") no-repeat;
+      background-size:40% auto;
+      background-position:top center;
+      margin-top:10vh;
+    }
+    .know-more {
+      width:100%;
+      position:absolute;
+      top:35vh;
+      height:35vh;
+      background:url("/static/image/know-more.png") no-repeat;
+      background-size:20% auto;
+      background-position:top center;
+      margin-top:5vw;
+    }
+    .bottom-banner {
+      background:url("/static/image/p3-car.png") no-repeat;
+      background-size:100% auto;
+      background-position:bottom center;
+      height:100vh;
+      width:100%;
+      display:none;
+    }
+  }
+  section.page4 {
+    top:300vh;
+    .p4-title {
+      background:url("/static/image/p4-title.png") no-repeat;
+      background-size:100% auto;
+      background-position:center center;
+      width:70vw;
+      height:20vw;
+      position:absolute;
+      top:30vw;
+      left:5vw;
+    }
+    .button-area {
+      margin-top:35vh;
+    }
+    .footer {
+      position:absolute;
+      bottom:10vw;
+      width:100%;
+      .know-more {
+        width:27vw;
+        height:10vw;
+        float:left;
+        margin-left:5vw;
+        background:url("/static/image/know-more-text.png") no-repeat;
+        background-size:100% auto;
+        background-position:bottom center;
+      }
+      .tab-map {
+        width:27vw;
+        height:10vw;
+        float:left;
+        margin-left:4vw;
+        background:url("/static/image/tab-map-mode.png") no-repeat;
+        background-size:100% auto;
+        background-position:bottom center;
+      }
+      .score-rank {
+        width:27vw;
+        height:10vw;
+        float:left;
+        margin-left:4vw;
+        background:url("/static/image/score-ranking-text.png") no-repeat;
+        background-size:100% auto;
+        background-position:bottom center;
+      }
+    }
+    .line {
+      .left-button {
+        background-size:100% auto !important;
+        background-position:center center;
+        width:40vw;
+        margin-left:5vw;
+        height:15vw;
+        float:left;
+      }
+      .right-button {
+        background-size:100% auto !important;
+        background-position:center center;
+        width:40vw;
+        margin-right:5vw;
+        height:15vw;
+        float:right;
+      }
+      .little-cource {
+        background:url("/static/image/little-cource-icon.jpg") no-repeat;
+      }
+      .space-rebuild {
+        background:url("/static/image/space-rebuild-icon.jpg") no-repeat;
+      }
+      .option {
+        background:url("/static/image/option-icon.jpg") no-repeat;
+      }
+      .drive-success {
+        background:url("/static/image/drive-success-icon.jpg") no-repeat;
+      }
+      .five-can {
+        background:url("/static/image/five-can-icon.jpg") no-repeat;
+      }
+      .get-first {
+        background:url("/static/image/get-first-icon.jpg") no-repeat;
+      }
+      .perfect-in {
+        background:url("/static/image/perfect-in-icon.jpg") no-repeat;
+      }
+      .big-buy {
+        background:url("/static/image/big-buy-icon.jpg") no-repeat;
+      }
+      .drive-success {
+        background:url("/static/image/drive-success-icon.jpg") no-repeat;
+      }
+      .hot-person {
+        background:url("/static/image/hot-person-icon.jpg") no-repeat;
+      }
+      .throw-money {
+        background:url("/static/image/throw-money-icon.jpg") no-repeat;
+      }
+    }
+  }
+}

@@ -1,0 +1,188 @@
+$background:#cecece;
+$border:#dcdcdc;
+$fontBlack:#333;
+@font-face {
+  font-family:benz;
+  src:url('../../benz.ttf');
+}
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.clearfix   {
+  display:inline-table;
+  height:1%;
+  display:block;
+}
+
+.btn {
+  border-radius:2px;
+  background:#737373;
+  padding:3px 20px;
+  border:1px solid #737373;
+  line-height:25px;
+  color:$fontBlack;
+  height:24px;
+  display:block;
+  text-align:center;
+}
+$fontColor:#cecece; 
+body {
+  font-family:benz;
+  background:url("/static/image/background.jpg");
+  background-size:cover;
+  .header {
+    margin:10px;
+    height:32px;
+    #taskList {
+      float:left;
+      margin-right:10px;
+    }
+    #userList {
+      float:left;
+    }
+    #controllerList {
+      float:right;
+    }
+  }
+  .subheader {
+    margin:20px;
+    height:35px;
+    .left-area {
+      float:left;
+      #addUser {
+        margin-top:20px;
+        height:30px;
+        line-height:30px;
+      }
+    }
+    .right-area {
+      float:right;
+      #quit {
+        height:20px;
+        line-height:20px;
+      }
+      #changePassword {
+        height:20px;
+        line-height:20px;
+        margin-bottom:10px;
+      }
+    }
+  }
+  .tbl {
+    margin:0 auto;
+    border:1px solid $border;
+    width:90%;
+    text-align:center;
+    th {
+      width:40px;
+      background:#737373;
+      padding:5px;
+    }
+    td {
+      background:#fff;
+      width:40px;
+      padding:5px;
+    }
+  }
+  .menu {
+    color:$fontColor;
+    text-align:center;
+    width:400px;
+    position:absolute;
+    top:50%;
+    margin-top:-50px;
+    left:50%;
+    margin-left:-200px;
+    z-index:200;
+    background:#000;
+    display:none;
+    border:3px solid $border;
+    .title {
+      font-size:20px;
+      margin:10px;
+    }
+    .menu-inner {
+      .username {
+        width:100%;
+        height:30px;
+        .left-area {
+          width:30%;
+          height:30px;
+          float:left;
+        }
+        .right-area {
+          float:left;
+          height:30px;
+          width:60%;
+          input {
+            width:100%;
+            border:1px solid #737373;
+            height:25px;
+            background:#cecece;
+          }
+        }
+      }
+      .password {
+        width:100%;
+        height:30px;
+        .left-area {
+          width:30%;
+          height:30px;
+          float:left;
+        }
+        .right-area {
+          float:left;
+          height:30px;
+          width:60%;
+          input {
+            width:100%;
+            height:25px;
+            border:none;
+            background:#cecece;
+          }
+        }
+      }
+      .priv {
+        width:100%;
+        height:30px;
+        .left-area {
+          width:30%;
+          height:30px;
+          float:left;
+        }
+        .right-area {
+          float:left;
+          height:30px;
+        }
+        .radio {
+          float:left;
+        }
+      }
+      .line {
+        margin-bottom:10px;
+      }
+      .btn-line {
+        height:45px;
+        .btn-area {
+          width:200px;
+          height:30px;
+          margin:0 auto;
+        }
+        .btn {
+          cursor:pointer;
+          margin-right:20px;
+          float:left;
+
+        }
+      }
+    }
+  }
+}
+.btn {
+  cursor:pointer;
+}

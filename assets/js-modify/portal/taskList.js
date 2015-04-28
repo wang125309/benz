@@ -1,6 +1,7 @@
 require("../../../bower_components/zepto/zepto.js");
 require("../../../bower_components/zeptojs/src/touch.js");
 require("../../../bower_components/velocity/velocity.min.js");
+require("./wx_plugin.js");
 
 window.onload = function() {
     $(".little-cource").on("click",function(){

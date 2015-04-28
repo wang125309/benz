@@ -1,0 +1,31 @@
+include ./lib/header.jade
+link(href="/static/css/spot/chooseTask.css",rel="stylesheet",type="text/css")
+script(src="/static/js/spot/chooseTask.min.js",language="javascript")
+
+body
+    div.body
+        div.btn-line
+            button 手动增加
+        div.task-title
+            {% if taskname == 'littleCource' %}
+            div.title 小课堂项目选择参加者
+            {% elif task == 'bigBuy' %}
+            div.title 大富翁项目选择参加者
+            {% elif task == 'fiveCan' %}
+            div.title 五项全能项目选择参加者
+            {% elif task == 'hotPerson' %}
+            div.title 集赞大师项目选择参加者
+            {% elif task == 'driveSuccess' %}
+            div.title 非凡驾驶项目选择参加者
+            {% elif task == 'perfectIn' %}
+            div.title 完美入位项目选择参加者
+            {% elif task == 'option' %}
+            div.title 定点操控项目选择参加者
+            {% elif task == 'throwMoney' %}
+            div.title 一掷千项目选择参加者金
+            {% elif task == 'spaceRebuild' %}
+            div.title 空间重塑项目选择参加者
+            {% elif task == 'getFirst' %}
+            div.title 抢占先机项目选择参加者
+            {% endif %}
+        

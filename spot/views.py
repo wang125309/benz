@@ -14,8 +14,6 @@ sys.setdefaultencoding('UTF-8')
 
 # Create your views here.
 logger = logging.getLogger(__name__)
-appid = "wx91e4c1925de9ff50"
-secret = "f2f564ea79ff43f7ed3004821ac3b2b8"
 
 def loginNeed(func):
     def _loginNeed(request):
@@ -78,12 +76,18 @@ def chooseTask(request):
     })
 
 @loginNeed
+def taskTerm(request):
+    task_id = request.GET.get('task_id')
+    term = request.GET.get('term')
+    return render(request, "spot/taskTerm.html")
+
+@loginNeed
 def register(request):
     return render(request,"spot/register.html")
 
 @loginNeed
-def showTaskScore(request):
-    return render(request,"spot/showTaskScore.html")
+def editScore(request):
+    return render(request,"spot/editScore.html")
 
 @loginNeed
 def superUserAdd(request):

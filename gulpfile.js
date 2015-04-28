@@ -61,7 +61,7 @@ gulp.task('sass',function(){
         .pipe(gulp.dest('./assets/css'));
 });
 
-var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','spot/login', 'spot/chooseList'];
+var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','backend/problem','spot/login','portal/showDetail','backend/sign','portal/problem'];
 
 gulp.task('js',function(){
     for (i in js_files_backend) {

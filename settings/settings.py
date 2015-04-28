@@ -66,9 +66,9 @@ DATABASES = {
         'ENGINE': 'django_mysqlpool.backends.mysqlpool',
         'NAME': 'benz',
         'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'PASSWORD': 'qingdian4422',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 

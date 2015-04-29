@@ -41,3 +41,4 @@ class UserTaskProject(models.Model):
     littleCourceJoined = models.IntegerField(null=True)
     getFirstJoined = models.IntegerField(null=True)
     giveNum = models.CharField(max_length=127)
+    total_score = models.IntegerField(null=True)

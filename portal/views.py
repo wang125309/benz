@@ -13,6 +13,7 @@ from django.core.cache import cache
 from functools import wraps
 import sys
 import re
+import math
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 
@@ -27,21 +28,36 @@ def getCode(func):
             t = Task.objects.all().filter(taskcity=request.session['location'])
             taskId = 0
             for i in t:
-                if t.cityname is not u'泉州市':
+                if i.taskcity is not u'泉州市' :
                     taskId = i.id
             #FIXME
             #对于这个id就行分配
-            utp = UserTaskProject.objects.all().filter(taskId = taskId)
+            utp = UserTaskProject.objects.all().filter(taskid = taskId)
             if len(utp) :
                 try:
                     user = UserTaskProject.objects.get(openid=request.session['openid'])
+                    request.session['code'] = user.giveNum
                 except Exception,e:
                     u = User.objects.get(openid=request.session['openid'])
-                    user = UserTaskProject(openid=request.session['openid'],nickname=u.nickname,headimgurl=u.headimgurl,taskid=taskId,fiveCan=0,bigBuy=0,hotPerson=0,driveSuccess=0,spaceRebuild=0,throwMoney=0,option=0,perfectIn=0,littleCource=0,getFirst=0,fiveCanJoined=0,bigBuyJoined=0,hotPersonJoined=0,driveSuccessJoined=0,spaceRebuildJoined=0,throwMoneyJoined=0,optionJoined=0,perfectInJoined=0,littleCourceJoined=0,getFirstJoined=0,giveNum='')
+                    cu = utp.count()
+                    code = ""
+                    if cu%4 == 0:
+                        code = 'A'+str(int(math.ceil(cu/4.0)))
+                    elif cu%4==1:
+                        code = 'B'+str(int(math.ceil(cu/4.0)))
+                    elif cu%4==2:
+                        code = 'C'+str(int(math.ceil(cu/4.0)))
+                    else:
+                        code = 'D'+str(int(math.ceil(cu/4)))
+                    user = UserTaskProject(openid=request.session['openid'],nickname=u.nickname,headimgurl=u.headimgurl,taskid=taskId,fiveCan=0,bigBuy=0,hotPerson=0,driveSuccess=0,spaceRebuild=0,throwMoney=0,option=0,perfectIn=0,littleCource=0,getFirst=0,fiveCanJoined=0,bigBuyJoined=0,hotPersonJoined=0,driveSuccessJoined=0,spaceRebuildJoined=0,throwMoneyJoined=0,optionJoined=0,perfectInJoined=0,littleCourceJoined=0,getFirstJoined=0,giveNum=code)
                     user.save()
-            request.session['code'] = code
-            u.code = code
-            u.save()
+                    request.session['code'] = code
+            else :
+                code = 'A1'
+                u = User.objects.get(openid=request.session['openid'])
+                user = UserTaskProject(openid=request.session['openid'],nickname=u.nickname,headimgurl=u.headimgurl,taskid=taskId,fiveCan=0,bigBuy=0,hotPerson=0,driveSuccess=0,spaceRebuild=0,throwMoney=0,option=0,perfectIn=0,littleCource=0,getFirst=0,fiveCanJoined=0,bigBuyJoined=0,hotPersonJoined=0,driveSuccessJoined=0,spaceRebuildJoined=0,throwMoneyJoined=0,optionJoined=0,perfectInJoined=0,littleCourceJoined=0,getFirstJoined=0,giveNum=code)
+                user.save()
+                request.session['code'] = code
             return func(request)
         else:
             return func(request)
@@ -258,6 +274,7 @@ def upload_position(request):
         r.encoding = "utf8"
         res = r.json()
         request.session['location'] = res['result']['addressComponent']['city'].encode("utf8")
+        print request.session['location']
     return JsonResponse({
         "status":"success"    
     })

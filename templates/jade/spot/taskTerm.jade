@@ -1,10 +1,63 @@
 include ./lib/header.jade
 link(href="/static/css/spot/chooseTask.css",rel="stylesheet",type="text/css")
 script(src="/static/js/spot/chooseTask.min.js",language="javascript")
+link(href="/static/css/spot/taskTerm.css",rel="stylesheet",type="text/css")
+script(src="/static/js/spot/taskTerm.min.js",language="javascript")
 
 body
     div.body
         section.register
-            button.register(type="button") 手动注册
+            button.register(type="button") 手动添加
         section.main
-            
+            div.title xx项目选择参与者
+            div.handAdd
+                div.input-area
+                    span.username 用户名：
+                    input.user-text#username(type="text")
+                div.input-area
+                    span.userno 编 号：
+                    input.user-text#userno(type="text")
+                div.btn-line
+                    button.btn#adduser-btn(type="button") 添加
+                    button.btn#adduser-cancel(type="button") 取消
+            div.scoreAdd
+                div.title 得分
+                div.input-area
+                    input.user-text#score(type="text")
+                div.btn-line
+                    button.btn#editscore-btn(type="button") 添加
+                    button.btn#editscore-cancel(type="button") 取消
+            div.userList
+                table.userTable
+                   tr
+                     th 分配号
+                     th 姓名
+                     th 昵称
+                     th 分数
+                   tr.user-tr
+                     td.td-id 1
+                     td.td-name 李康达
+                     td.td-curtain likd
+                     td.td-score 0
+                   tr.user-tr
+                     td.td-id 2
+                     td.td-name 梁美娟
+                     td.td-curtain lmj
+                     td.td-score 0
+                   tr.user-tr
+                     td.td-id 3
+                     td.td-name 范英凯
+                     td.td-curtain fyk
+                     td.td-score 0
+                   tr.user-tr
+                     td.td-id 4
+                     td.td-name 王伯森
+                     td.td-curtain wbl
+                     td.td-score 0
+                   {% for i in userList %}
+                   tr.user-tr
+                     td.td-id {{ i.id }}
+                     td.td-name {{ i.name }}
+                     td.td-curtain {{ i.curtain  }}
+                     td.td-score {{ i.score  }}
+                   {% endfor %}

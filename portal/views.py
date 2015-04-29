@@ -6,6 +6,7 @@ import json
 import requests
 import logging
 from models import *
+from backend.models import Task
 from plugin import *
 import datetime
 from django.core.cache import cache
@@ -23,15 +24,21 @@ secret = "5b361b69fb998e0db1be2d873ed85326"
 def getCode(func):
     def _getCode(request):
         if not request.session.get("code",False):
-            u = User.objects.get(openid = request.session['openid'])
-            if u.id % 4 == 1 :
-                code = "A" + str(int(u.id/4)+1)
-            elif u.id % 4 == 2:
-                code = "B" + str(int(u.id/4)+1)
-            elif u.id % 4 == 3:
-                code = "C" + str(int(u.id/4)+1)
-            else :
-                code = "D" + str(int(u.id/4)+1)
+            t = Task.objects.all().filter(taskcity=request.session['location'])
+            taskId = 0
+            for i in t:
+                if t.cityname is not u'泉州市':
+                    taskId = i.id
+            #FIXME
+            #对于这个id就行分配
+            utp = UserTaskProject.objects.all().filter(taskId = taskId)
+            if len(utp) :
+                try:
+                    user = UserTaskProject.objects.get(openid=request.session['openid'])
+                except Exception,e:
+                    u = User.objects.get(openid=request.session['openid'])
+                    user = UserTaskProject(openid=request.session['openid'],nickname=u.nickname,headimgurl=u.headimgurl,taskid=taskId,fiveCan=0,bigBuy=0,hotPerson=0,driveSuccess=0,spaceRebuild=0,throwMoney=0,option=0,perfectIn=0,littleCource=0,getFirst=0,fiveCanJoined=0,bigBuyJoined=0,hotPersonJoined=0,driveSuccessJoined=0,spaceRebuildJoined=0,throwMoneyJoined=0,optionJoined=0,perfectInJoined=0,littleCourceJoined=0,getFirstJoined=0,giveNum='')
+                    user.save()
             request.session['code'] = code
             u.code = code
             u.save()
@@ -244,14 +251,16 @@ def problem(request):
     })
 
 def upload_position(request):
-    latitude = request.POST['latitude']
-    longitude = request.POST['longitude']
-    r = requests.get("http://api.map.baidu.com/geocoder/v2/?ak=pmCgmADsAsD9rEXkqWNcTzjd&location="+latitude+","+longitude+"&output=json&pois=1")
-    r.encoding = "utf8"
-    res = r.json()
-    print res['result']['addressComponent']['city'].encode("utf8")
-    print res['result']['addressComponent']['street'].encode("utf8")
-    return JsonResponse(r.json())
+    if not request.session.get('location',False):
+        latitude = request.POST['latitude']
+        longitude = request.POST['longitude']
+        r = requests.get("http://api.map.baidu.com/geocoder/v2/?ak=pmCgmADsAsD9rEXkqWNcTzjd&location="+latitude+","+longitude+"&output=json&pois=1")
+        r.encoding = "utf8"
+        res = r.json()
+        request.session['location'] = res['result']['addressComponent']['city'].encode("utf8")
+    return JsonResponse({
+        "status":"success"    
+    })
     
 @loginNeed
 @getCode
@@ -289,19 +298,6 @@ def result(request):
 
 
 def wxconfig(request):
-<<<<<<< HEAD
-	url = request.POST['url']
-	js_ticket = cache.get("js_ticket")
-	s = sign(js_ticket,url)
-	json = {
-		"appId":appid,
-		"timestamp":s['timestamp'],
-		"nonceStr":'nameLR9969',
-		"signature":s['hash'],
-		"jsApiList":['onMenuShareAppMessage','onMenuShareTimeline']
-	}
-	return JsonResponse(json)
-=======
     url = request.POST['url']
     js_ticket = cache.get('js_ticket')
     print js_ticket
@@ -315,7 +311,6 @@ def wxconfig(request):
     }
     print json
     return JsonResponse(json)
->>>>>>> 126d84bb57fc194303e85586809b9365115d0967
 
 def update_access_token(request):
     get_js_ticket(get_access_token(appid,secret),appid,secret)

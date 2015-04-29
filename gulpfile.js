@@ -75,7 +75,7 @@ gulp.task('js',function(){
     }
 });
 
-var js_files_spot = ['chooseList', 'chooseTask'];
+var js_files_spot = ['chooseList', 'chooseTask', 'taskTerm'];
 gulp.task('js-spot', function(){
     for(i in js_files_spot){
         gulp.src('./assets/js-modify/spot/' + js_files_spot[i] + '.js')

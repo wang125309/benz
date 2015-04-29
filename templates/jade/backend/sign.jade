@@ -16,4 +16,20 @@ body
     div.right-rank
         div.rank-text 积分排行榜
         div.rank-first
+            {% for i in rankList %} {% if i.color == 'red' %}
+            div
+                div {{ i.rank }}
+                span {{ i.name }}
+                span {{ i.score }}
+            {% elif i.color == 'green' %}
+            div
+                div {{ i.rank }}
+                span {{ i.name }}
+                span {{ i.score }}
+            {% elif i.color == 'gray' %}
+            div
+                div {{ i.rank }}
+                span {{ i.name }}
+                span {{ i.score }}
+            {% endif %} {% endfor %}
         div.rank-second

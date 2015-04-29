@@ -5,6 +5,7 @@ import json
 import requests
 import logging
 from backend.models import *
+from portal.models import *
 import datetime
 from functools import wraps
 import sys
@@ -79,7 +80,62 @@ def chooseTask(request):
 def taskTerm(request):
     task_id = request.GET.get('task_id')
     term = request.GET.get('term')
-    return render(request, "spot/taskTerm.html")
+    userList = []
+    userListObjects = []
+    try:
+        if term == 'five-can':
+            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, fiveCanJoined=1).all()
+        if term == 'driver-success':
+            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, driveSuccessJoined=1).all()
+        if term == 'throw-money':
+            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, throwMoneyJoined=1).all()
+        for userListObject in userListObjects:
+            userList.append({
+                'id': userListObject.openid,
+                'name': '',
+                'score': userListObject.getFirst,
+                'nickname': userListObject.nickname,
+            })
+    except Exception as e:
+        print str(e)
+    return render(request, "spot/taskTerm.html", {'userList': userList, 'term': term})
+
+
+@loginNeed
+def addUser(request):
+    status = {
+        'success': False
+    }
+    #{username: username, userno: userno, term: term}
+    username = request.POST.get('username')
+    term = request.POST.get('term')
+    userno = request.POST.get('userno')
+    return JsonResponse(status)
+
+@loginNeed
+def addScore(request):
+    status = {
+        'success': False
+    }
+    #user_id: id, score: score, term: term
+    try:
+        user_id = request.POST.get('user_id')
+        score = request.POST.get('score')
+        term = request.POST.get('term')
+        print user_id, score, term
+        user = UserTaskProject.objects.filter(openid=user_id).first()
+        if term == 'get-first':
+            user.getFirst = int(score)
+        user.save()
+        status['success'] = True
+    except Exception as e:
+        print str(e)
+    return JsonResponse(status)
+
+
+@loginNeed
+def addUser(request):
+    return
 
 @loginNeed
 def register(request):

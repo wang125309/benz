@@ -29,14 +29,38 @@ $(function(){
         });
     });
     $(".user-tr").on("click", function(e){
-        var score = $(e.target).find('#td-score').text();
-        console.log($(e.target).find('#td-score'));
-        console.log(score);
+        var scoreAdd = $('.scoreAdd');
+        var score = '';
+        var id = '';
+        if($(e.target).parent('.user-tr').length){
+            if($(e.target).parent('.user-tr').find('.td-score').length)score = $(e.target).parent('.user-tr').find('.td-score')[0].innerText;
+            if($(e.target).parent('.user-tr').find('.td-score').length)id = $(e.target).parent('.user-tr').find('.td-id')[0].innerText;
+        }
+        if(!id)return;
+        if(id)scoreAdd.data('id', id);
+        if(score)scoreAdd.data('score', score);
         if(typeof(score)!="undefined")$('#score').val(score);
-        $('.scoreAdd').show();
+        scoreAdd.show();
     });
     $("#editscore-cancel").on("click", function(){
         $('#score').val("");
         $('.scoreAdd').hide();
+    });
+    $("#editscore-btn").on("click", function(){
+         var scoreAdd = $('.scoreAdd');
+         var score_input = $('#score');
+         var id = scoreAdd.data('id');
+         var score = scoreAdd.data('score');
+         if(!id)return;
+         if(score == score_input.val())return;
+         score = score_input.val();
+         $.ajax({type:'post',url:'/benz/spot/addScore/',data: {user_id: id, score: score},
+            success:function(result){
+//                if(result.status=='success')location.href=location.href;
+            },
+            error: function(result){
+                
+            }
+        });
     })
 });

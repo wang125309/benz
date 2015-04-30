@@ -20,10 +20,11 @@ $(function(){
        var handAdd = $('.handAdd');
        var username = $('#username').val();
        var term = handAdd.data('term');
-        var userno = $('#userno').val();
-        $.ajax({type:'post',url:'/benz/spot/addUser',data: {username: username, userno: userno, term: term},
+       var userno = $('#userno').val();
+       var taskid = handAdd.data('taskid');
+        $.ajax({type:'post',url:'/benz/spot/addUser',data: {username: username, userno: userno, term: term, taskid: taskid},
             success:function(result){
-                if(result.status=='success')location.href=location.href;
+                if(result.success)location.href=location.href;
             },
             error:function(){
                 handAdd.hide();

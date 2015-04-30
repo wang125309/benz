@@ -10,7 +10,7 @@ body
             button.register(type="button") 手动添加
         section.main
             div.title xx项目选择参与者
-            div(data-term="{{term}}").handAdd
+            div(data-term="{{term}}", data-taskid="{{taskid}}").handAdd
                 div.input-area
                     span.username 用户名：
                     input.user-text#username(type="text")
@@ -35,6 +35,6 @@ body
                    tr(data-id="{{i.id}}", data-score="{{i.score}}").user-tr
                      td.td-id {{ i.id }}
                      td.td-name {{ i.name }}
-                     td.td-curtain {{ i.curtain  }}
+                     td.td-curtain {{ i.nickname  }}
                      td.td-score {{ i.score  }}
                    {% endfor %}

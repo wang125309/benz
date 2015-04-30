@@ -8,6 +8,7 @@ from backend.models import *
 from portal.models import *
 import datetime
 from functools import wraps
+from django.core.cache import cache
 import sys
 
 reload(sys)
@@ -82,7 +83,13 @@ def taskTerm(request):
     term = request.GET.get('term')
     userList = []
     userListObjects = []
-    try:
+    term_dict = {
+      'five-can': 'fiveCan',
+      'driver-success': 'driverSuccess',
+      'throw-money': 'throwMoney'
+    }
+    if term in term_dict.keys():
+     try:
         if term == 'five-can':
             userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, fiveCanJoined=1).all()
         if term == 'driver-success':
@@ -90,15 +97,26 @@ def taskTerm(request):
         if term == 'throw-money':
             userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, throwMoneyJoined=1).all()
         for userListObject in userListObjects:
-            userList.append({
-                'id': userListObject.openid,
-                'name': '',
-                'score': userListObject.getFirst,
+            user_info ={
+                'id': getattr(userListObject, 'id') or '',
+                'score': getattr(userListObject, term_dict[term]) or 0,
                 'nickname': userListObject.nickname,
-            })
-    except Exception as e:
+            }
+            openid = getattr(userListObject, 'openid')
+            print openid, 'openid'
+            if openid:
+                try:
+                    user_json = cache.get(openid)
+                    print 'user_json', user_json
+                    user_json = json.loads(user_json)
+                    user_info['name'] = user_json.get('username') or ''
+                except Exception as e:
+                    print str(e)
+                    pass
+            userList.append(user_info)
+     except Exception as e:
         print str(e)
-    return render(request, "spot/taskTerm.html", {'userList': userList, 'term': term})
+    return render(request, "spot/taskTerm.html", {'userList': userList, 'term': term, 'taskid': task_id})
 
 
 @loginNeed
@@ -108,8 +126,16 @@ def addUser(request):
     }
     #{username: username, userno: userno, term: term}
     username = request.POST.get('username')
+    taskid = request.POST.get('taskid')
     term = request.POST.get('term')
-    userno = request.POST.get('userno')
+    if username and taskid and term:
+       try:
+         if term == 'five-can':
+             new_user = UserTaskProject(nickname=username, taskid=taskid, fiveCanJoined=1)
+         new_user.save()
+         status['success'] = True
+       except Exception as e:
+         print str(e)
     return JsonResponse(status)
 
 @loginNeed
@@ -121,21 +147,22 @@ def addScore(request):
     try:
         user_id = request.POST.get('user_id')
         score = request.POST.get('score')
+        score = int(score)
         term = request.POST.get('term')
-        print user_id, score, term
-        user = UserTaskProject.objects.filter(openid=user_id).first()
-        if term == 'get-first':
-            user.getFirst = int(score)
-        user.save()
-        status['success'] = True
+        if term in ['five-can', 'driver-success', 'throw-money']:
+            user = UserTaskProject.objects.filter(openid=user_id).first()
+            if term == 'five-can':
+                user.fiveCan = score
+            if term == 'driver-success':
+                user.driverSuccess = score
+            if term == 'throw-Money':
+                user.throwMoney = score
+            user.save()
+            status['success'] = True
     except Exception as e:
         print str(e)
     return JsonResponse(status)
 
-
-@loginNeed
-def addUser(request):
-    return
 
 @loginNeed
 def register(request):

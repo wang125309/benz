@@ -9,6 +9,7 @@ from django.core.cache import cache
 import logging
 from models import *
 from portal.models import User as portalUser
+from portal.models import UserTaskProject as usertaskProject
 import datetime
 import sys
 import time
@@ -288,10 +289,72 @@ def taskList(request):
 
 @loginNeed
 def sign(request):
-    users = portalUser.objects.all().order_by("-id")[0:10].reverse()
+    users = usertaskProject.objects.all().order_by("-total_score")[0:10].reverse()
+    rank_lists = []
+
+    def get_rank_list(rank_user_list):
+        rank_list = []
+        for key, item in enumerate(rank_user_list):
+            rank = {'color': 'red'}
+            if (key+1)%2==0:
+                rank['color'] = 'green'
+            elif (key+1)%3==0:
+                rank['color'] = 'gray'
+            rank['nickname'] = getattr(item, 'nickname')
+            rank['rank'] = key + 1
+            rank['total_score'] = getattr(item, 'total_score') or 0
+            rank_list.append(rank)
+        return rank_list
+
+    try:
+        rank_users = usertaskProject.objects.all().order_by("-total_score")[0:40]
+        rank_first = get_rank_list(rank_users[:20])
+        if rank_first:
+            rank_lists.append(rank_first)
+        rank_second = get_rank_list(rank_users[20:])
+        if rank_second:
+            rank_lists.append(rank_second)
+    except Exception as e:
+        print str(e)
     return render(request,"backend/sign.html",{
-        "user":users
+        "user": users,
+        "rankLists": rank_lists
     })
+
+
+@loginNeed
+def sign_rank(request):
+    users = usertaskProject.objects.all().order_by("-id")[0:10].reverse()
+    rank_lists = []
+    def get_rank_list(rank_user_list):
+        rank_list = []
+        for key, item in enumerate(rank_user_list):
+            rank = {'color': 'red'}
+            if (key+1)%2==0:
+                rank['color'] = 'green'
+            elif (key+1)%3==0:
+                rank['color'] = 'gray'
+            rank['nickname'] = getattr(item, 'nickname')
+            rank['rank'] = key + 1
+            rank['total_score'] = getattr(item, 'total_score', 0)
+            rank_list.append(rank)
+        return rank_list
+
+    try:
+        rank_users = usertaskProject.objects.all().order_by("total_score")[0:40]
+        rank_first = get_rank_list(rank_users[:20])
+        if rank_first:
+            rank_lists.append(rank_first)
+        rank_second = get_rank_list(rank_users[20:])
+        if rank_second:
+            rank_lists.append(rank_second)
+    except Exception as e:
+        print str(e)
+    return JsonResponse({
+        "user": users,
+        "rankLists": rank_lists
+    })
+
 
 @loginNeed
 def signMessage(request):

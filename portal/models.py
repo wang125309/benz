@@ -16,9 +16,9 @@ class Wx(models.Model):
     js_ticket = models.CharField(max_length=127)
 
 class UserTaskProject(models.Model):
-    openid = models.CharField(max_length=127)
-    nickname = models.CharField(max_length=127,null=True)
-    headimgurl = models.CharField(max_length=255,null=True)
+    openid = models.CharField(max_length=127, null=True)
+    nickname = models.CharField(max_length=127, null=True)
+    headimgurl = models.CharField(max_length=255, null=True)
     taskid = models.CharField(max_length=127)
     fiveCan = models.IntegerField(null=True)
     bigBuy = models.IntegerField(null=True)
@@ -40,5 +40,5 @@ class UserTaskProject(models.Model):
     perfectInJoined = models.IntegerField(null=True)
     littleCourceJoined = models.IntegerField(null=True)
     getFirstJoined = models.IntegerField(null=True)
-    giveNum = models.CharField(max_length=127)
+    giveNum = models.CharField(max_length=127, null=True)
     total_score = models.IntegerField(null=True)

@@ -15,7 +15,21 @@ $(function(){
             "-webkit-transform":"scale("+initPos[i][2]+")"
         });
     }
-    setInterval(function(){
+    var auto_refresh = function(){
+        $.get('/benz/backend/sign/', function(result){
+             $(".rank").html($($(result).children()[3]).html());
+             console.log('ranking');
+            }, "html");
+    }
+
+    var _time_refresh = function(){
+        setTimeout(function(){
+            auto_refresh();
+            _time_refresh();
+        }, 5000)
+    }
+
+    var auto_move = function(){
         for(i=0 ; i<children.length-1 ;i++) {
             n = Math.random()*200;
             m = Math.random()*200;
@@ -25,5 +39,13 @@ $(function(){
                 "-webkit-transform":"scale("+initPos[i][2]+")"
             },3000);
         }
-    },3000);
+    };
+    var _time_out = function(){
+        setTimeout(function(){
+            auto_move();
+            _time_out();
+        }, 3000);
+    }
+    _time_out();
+    _time_refresh();
 });

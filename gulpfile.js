@@ -86,8 +86,20 @@ gulp.task('js-spot', function(){
         .pipe(uglify())
         .pipe(gulp.dest('./assets/js/spot/'));
     }
-})
+});
 
+var js_files_backend = ['sign', 'rankCtrl'];
+gulp.task('js-backend', function(){
+    for(i in js_files_backend){
+    gulp.src('./assets/js-modify/backend/'+ js_files_backend[i]+'.js')
+    .pipe(browserify())
+    .pipe(concat('.js'))
+    .pipe(gulp.dest('./assets/js/backend'))
+    .pipe(rename(js_files_backend[i]+'.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./assets/js/backend'));
+    }
+})
 gulp.task('jade-spot',function(){
     var jade_files = {};
     gulp.src('./templates/jade/spot/*.jade')

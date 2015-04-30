@@ -3,6 +3,7 @@ html(lang="en")
     head
         meta(http-equiv="Content-Type",content="text/html",charset="utf-8")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/sign.min.js")
+        script(language="javascript",src="{{ STATIC_URL }}js/backend/rankCtrl.min.js")
         link(href="{{ STATIC_URL }}css/backend/sign.css",rel="stylesheet",type="text/css")
 body
     div.left-wall
@@ -13,7 +14,31 @@ body
                 div.avatar(style="background:url({{ i.headimgurl }})")=""
                 div.nickname {{ i.nickname }}
             {% endfor %}
-    div.right-rank
+    div(ng-controller="rankCtrl").right-rank
         div.rank-text 积分排行榜
-        div.rank-first
-        div.rank-second
+        {% for rankList in rankLists %}
+        div.rank
+            div.th
+                div 名次
+                div 用户
+                div 积分
+            div
+                {% for i in rankList %}
+                {% if i.color == 'red' %}
+                div.red_bar
+                    div.black_no {{ i.rank }}
+                    span.nickname {{ i.nickname }}
+                    span.total_score {{ i.total_score }}
+                {% elif i.color == 'green' %}
+                div.green_bar
+                    div.black_no {{ i.rank }}
+                    span.nickname {{ i.nickname }}
+                    span.total_score {{ i.total_score }}
+                {% elif i.color == 'gray' %}
+                div.gray_bar
+                   div.black_no {{ i.rank }}
+                   span.nickname {{ i.nickname }}
+                   span.total_score {{ i.total_score }}
+                {% endif %}
+                {% endfor %}
+        {% endfor %}

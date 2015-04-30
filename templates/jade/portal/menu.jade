@@ -1,0 +1,19 @@
+include ./lib/header.jade
+    script(language="javascript",src="/static/js/portal/showDetail.js")
+    link(href="/static/css/portal/menu.css",rel="stylesheet",type="text/css")
+    body
+        div.body
+            include ./lib/title.jade
+            div.square=""
+            div.line
+                a(href="/benz/portal/portal/#menu") 各区域导览-菜单模式
+            div.line
+                a(href="/benz/portal/mapMode/") 各区域导览-地图模式
+            div.line
+                a(href="/benz/portal/knowMore/") 了解活动详情
+            div.line
+                a(href="/benz/portal/scoreRank/") 您的分数排行
+            div.line
+                a(href="/benz/portal/portal/#instruction") 活动简介
+            div.line
+                a(href="/benz/portal/portal") 活动首页

@@ -41,5 +41,8 @@ $(function(){
                 });
             });
         });
-});
+    });
+    $(".left-menu").on("click",function(){
+        location.href = '/benz/portal/menu/' ;   
+    }); 
 });

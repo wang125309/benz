@@ -112,7 +112,7 @@ def loginAction(request):
 def problem(request):
     if request.GET.get("id",False):
         id = request.GET['id']
-        if int(id) > 82:
+        if int(id) >= 44:
             return HttpResponseRedirect("/benz/backend/problem/?id=1")
         try:
             p = Problem.objects.get(id=id)
@@ -206,7 +206,7 @@ def deleteTask(request):
         })
 
 def getProblemId(request):
-    if cache.get("problemId") and int(cache.get("problemId")) < 83:
+    if cache.get("problemId") and int(cache.get("problemId")) < 44:
         return JsonResponse({
             "status":"success",
             "problemId":cache.get("problemId")

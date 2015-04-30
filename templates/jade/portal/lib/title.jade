@@ -3,11 +3,11 @@ div.title-banner
     div.left-menu=""
     div.title-background=""
     {% if type == 'A' %}
-    div.right-number(style="background-color:#f38001;") {{ code }}
-    {% elif type == 'B' %}
     div.right-number(style="background-color:#0189df;") {{ code }}
-    {% elif type == 'C' %}
+    {% elif type == 'B' %}
     div.right-number(style="background-color:#fef900;") {{ code }}
-    {% else %}
+    {% elif type == 'C' %}
     div.right-number(style="background-color:#939393;") {{ code }}
+    {% else %}
+    div.right-number(style="background-color:#f38001;") {{ code }}
     {% endif %}

@@ -18,34 +18,34 @@ window.onload = function() {
     active = 1;
     $(".move").on("swipeUp",function(e){
         if(active == 1) {
-            $(".page2").css({
+            $(".page2").velocity({
                 "top":"0"
-            });
-            $(".page1").css({
+            },400);
+            $(".page1").velocity({
                 "top":"-"+h+"px"
-            });
-            $(".page3").css({
+            },400);
+            $(".page3").velocity({
                 "top":h+"px"
-            });
-            $(".page4").css({
+            },400);
+            $(".page4").velocity({
                 "top":2*h+"px"
-            });
+            },400);
             active = 2;
             $(".title").velocity("fadeIn");
         }
         else if(active == 2) {
-            $(".page4").css({
+            $(".page4").velocity({
                 "top":h+"px"
-            });
-            $(".page3").css({
+            },400);
+            $(".page3").velocity({
                 "top":"0"
-            });
-            $(".page2").css({
+            },400);
+            $(".page2").velocity({
                 "top":"-"+h+"px"
-            });
-            $(".page1").css({
+            },400);
+            $(".page1").velocity({
                 "top":"-"+2*h+"px"
-            });
+            },400);
             setTimeout(function(){
                 $(".bottom-banner").velocity("fadeIn");
             },1500);
@@ -53,25 +53,25 @@ window.onload = function() {
             active = 3;
         }
         else if(active == 3) {
-            $(".page4").css({
+            $(".page4").velocity({
                 "top":"0"
-            });
-            $(".page3").css({
+            },400);
+            $(".page3").velocity({
                 "top":"-"+h+"px"
-            });
-            $(".page2").css({
+            },400);
+            $(".page2").velocity({
                 "top":"-"+2*h+"px"
-            });
-            $(".page1").css({
+            },400);
+            $(".page1").velocity({
                 "top":"-"+3*h+"px"
-            });
+            },400);
             $(".left-menu").css({
                 "width":"20vw",
                 "height":"20vw",
             });
-            $(".title-background").css({
-                "background-size":"100% auto"
-            });
+            $(".title-background").velocity({
+                "background-size":"100%"
+            },1000);
             $(".right-number").css({
                 "width":"20vw",
                 "height":"20vw"
@@ -81,57 +81,57 @@ window.onload = function() {
     });
     $(".move").on("swipeDown",function(e){
         if(active == 2) {
-            $(".page1").css({
+            $(".page1").velocity({
                 "top":"0"
-            });
-            $(".page2").css({
+            },400);
+            $(".page2").velocity({
                 "top":h+"px"
-            });
-            $(".page3").css({
+            },400);
+            $(".page3").velocity({
                 "top":h*2+"px"
-            });
-            $(".page4").css({
+            },400);
+            $(".page4").velocity({
                 "top":h*3+"px"
-            });
+            },400);
             active = 1;
             $(".title").velocity("fadeOut");
         }
         else if(active == 3) {
-            $(".page2").css({
+            $(".page2").velocity({
                 "top":"0"
-            })
-            $(".page3").css({
+            },400);
+            $(".page3").velocity({
                "top":h+"px"
-            });
-            $(".page1").css({
+            },400);
+            $(".page1").velocity({
                 "top":"-"+h+"px"
-            });
-            $(".page4").css({
+            },400);
+            $(".page4").velocity({
                 "top":2*h+"px"
-            });
+            },400);
             active = 2;
         }
         else if(active == 4) {
-            $(".page3").css({
+            $(".page3").velocity({
                 "top":"0"
-            });
-            $(".page2").css({
+            },400);
+            $(".page2").velocity({
                 "top":"-"+h+"px"
-            });
-            $(".page1").css({
+            },400);
+            $(".page1").velocity({
                 "top":"-"+2*h+"px"
-            });
-            $(".page4").css({
+            },400);
+            $(".page4").velocity({
                 "top":h+"px"
-            });
+            },400);
 
             $(".left-menu").css({
                 "width":"0",
                 "height":"0",
             });
-            $(".title-background").css({
-                "background-size":"150% auto"
-            });
+            $(".title-background").velocity({
+                "background-size":"150%"
+            },1000);
             $(".right-number").css({
                 "width":"0",
                 "height":"0"

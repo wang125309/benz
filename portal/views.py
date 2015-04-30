@@ -6,7 +6,7 @@ import json
 import requests
 import logging
 from models import *
-from backend.models import Task
+from backend.models import Task,Problem
 from plugin import *
 import datetime
 from django.core.cache import cache
@@ -39,16 +39,16 @@ def getCode(func):
                     request.session['code'] = user.giveNum
                 except Exception,e:
                     u = User.objects.get(openid=request.session['openid'])
-                    cu = utp.count()
+                    cu = utp.count()+1
                     code = ""
-                    if cu%4 == 0:
+                    if cu%4 == 1:
                         code = 'A'+str(int(math.ceil(cu/4.0)))
-                    elif cu%4==1:
+                    elif cu%4 == 2:
                         code = 'B'+str(int(math.ceil(cu/4.0)))
-                    elif cu%4==2:
+                    elif cu%4 == 3:
                         code = 'C'+str(int(math.ceil(cu/4.0)))
                     else:
-                        code = 'D'+str(int(math.ceil(cu/4)))
+                        code = 'D'+str(int(math.ceil(cu/4.0)))
                     user = UserTaskProject(openid=request.session['openid'],nickname=u.nickname,headimgurl=u.headimgurl,taskid=taskId,fiveCan=0,bigBuy=0,hotPerson=0,driveSuccess=0,spaceRebuild=0,throwMoney=0,option=0,perfectIn=0,littleCource=0,getFirst=0,fiveCanJoined=0,bigBuyJoined=0,hotPersonJoined=0,driveSuccessJoined=0,spaceRebuildJoined=0,throwMoneyJoined=0,optionJoined=0,perfectInJoined=0,littleCourceJoined=0,getFirstJoined=0,giveNum=code)
                     user.save()
                     request.session['code'] = code
@@ -256,6 +256,112 @@ def mapMode(request):
 
 @loginNeed
 @getCode
+def knowMore(request):
+    code = request.session['code']
+    type = code[0]
+
+    return render(request,"portal/knowMore.html",{
+        "code":code,
+        "type":type
+    })
+
+@loginNeed
+@getCode
+def menu(request):
+    code = request.session['code']
+    type = code[0]
+
+    return render(request,"portal/menu.html",{
+        "code":code,
+        "type":type
+    })
+
+def getProblemId(request):
+    pid = cache.get("problemId")
+    while True:
+        if pid != cache.get("problemId"):
+            return JsonResponse({
+                "status":"success",
+                "problemId":cache.get("problemId")
+            })
+        else :
+            time.sleep(2)
+
+def answer(request):
+    problemId = cache.get("problemId")
+    p = Problem.objects.get(id=problemId)
+    if request.GET['answer'] == 'A':
+        if p.answer == 'A':
+            return JsonResponse({
+                "status":"success",
+                "correct":"true"
+            })
+        else :
+            return JsonResponse({
+                "status":"success",
+                "correct":"false"
+            })
+    elif request.GET['answer'] == 'B':
+        if p.answer == 'B':
+            return JsonResponse({
+                "status":"success",
+                "correct":"true"
+            })
+        else :
+            return JsonResponse({
+                "status":"success",
+                "correct":"false"
+            })
+        
+    elif request.GET['answer'] == 'C':
+        if p.answer == 'C':
+            return JsonResponse({
+                "status":"success",
+                "correct":"true"
+            })
+        else :
+            return JsonResponse({
+                "status":"success",
+                "correct":"false"
+            })
+        
+    else :
+        if p.answer == 'D':
+            return JsonResponse({
+                "status":"success",
+                "correct":"true"
+            })
+        else :
+            return JsonResponse({
+                "status":"success",
+                "correct":"false"
+            })
+
+def right(request):
+    if request.session.get('problemRight',False):
+        request.session['problemRight'] = int(request.session['problemRight']) + 1
+    else :
+        request.session['problemRight'] = 1
+    if request.session['problemRight'] >= 5:
+        if not request.session.get('problemScored'.False):
+            request.session['problemScored'] = '1'
+            u = UserTaskProject.objcects.get(openid=request.session['openid'])
+            u.getFirst = 2
+            return JsonResponse({
+                "status":"true"    
+            })
+        else :
+            return JsonResponse({
+                "status":"fail"
+            })
+    else:
+        return JsonResponse({
+            "status":"fail"    
+        })
+
+            
+@loginNeed
+@getCode
 def problem(request):
     code = request.session['code']
     type = code[0]
@@ -288,6 +394,7 @@ def result(request):
     taskname = q
     if q == 'littleCource':
         needScan = True
+    
     elif q == 'bigBuy':
         needScan = False
     elif q == 'fiveCan':

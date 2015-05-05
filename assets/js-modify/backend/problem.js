@@ -1,10 +1,10 @@
 $ = require("../../../bower_components/jquery/dist/jquery.js");
 
 $(function(){
-    $.get("/benz/backend/getProblemId/",function(d){
+    $.get("/benz/backend/getProblemId/?taskid="+$("#id").data("taskid"),function(d){
         console.log(d.problemId);
         if(d.problemId != $("#id").data("id")) {
-            location.href = "/benz/backend/problem/?id="+d.problemId; 
+            location.href = location.href; 
         }
         else {
             setInterval(function(){
@@ -13,8 +13,8 @@ $(function(){
                 });
                 $(".num").html($(".num").html()-1);
                 if($(".num").html() <= '0') {
-                    $.get("/benz/backend/setProblemId/?id="+parseInt($("#id").data("id")+1),function(){
-                        location.href = "/benz/backend/problem/?id="+parseInt($("#id").data("id")+1);
+                    $.get("/benz/backend/setProblemId/?taskid="+$("#id").data("taskid"),function(){
+                        location.href = location.href;
                     });
                 }
             },1000);

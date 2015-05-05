@@ -2,11 +2,13 @@
 
 body {
   color:#fff;
-
-  font-size:5.5vw;
+  * {
+    font-weight:100;
+  }
+  font-size:4.7vw;
   text-align:center;
   .title {
-    margin-top:20vw;
+    margin-top:10vw;
   }
   .second-title {
     margin-top:10vw;
@@ -17,7 +19,7 @@ body {
     margin-right: 5%;
     width: 90%;
     background-color: #262626;
-    border-radius: 0.5em;
+    border-radius: 2px;
     display: none;
     .input-area {
       margin: 5vw 0;
@@ -32,7 +34,7 @@ body {
     margin-right: 5%;
     width: 90%;
     background-color: #262626;
-    border-radius: 0.5em;
+    border-radius: 2px;
     display: none;
     .input-area {
       margin: 5vw 0;
@@ -51,27 +53,71 @@ body {
         width:20%;
         background-color: #262626;
         line-height:10vw;
-        border:1vm solid #000000;
+        border:1px solid #000000;
       }
       tbody tr td{
         width:20%;
         background-color: #262626;
         line-height:10vw;
-        border:1vm solid #000000;
+        border:1px solid #000000;
       }
       tbody tr th:first-child{
-        border-top-left-radius:0.9em;
+        border-top-left-radius:3px;
       }
       tbody tr th:last-child{
-        border-top-right-radius:0.9em;
+        border-top-right-radius:3px;
       }
       tbody tr:last-child td:first-child{
-        border-bottom-left-radius:0.9em;
+        border-bottom-left-radius:3px;
       }
       tbody tr:last-child td:last-child{
-        border-bottom-right-radius:0.9em;
+        border-bottom-right-radius:3px;
       }
     }
 
   }
+}
+  section.register {
+    width:100%;
+    margin-top:5vw;
+    height:10vw;
+    button.register {
+      float:right;
+      background:#262626;
+      border:1px solid #262626;
+      padding:1vw 4vw;
+      border-radius:5px;
+      margin-right:5vw;
+    }
+      margin-bottom:10vw;
+  }
+.user-text {
+  color:#333!important;
+}
+
+.ok {
+  margin-top:30vw;
+      background:#626262;
+      border:1px solid #262626;
+      padding:1vw 4vw;
+      border-radius:5px;
+      margin-right:5vw;
+  
+}
+.btn {
+
+      background:#626262;
+      border:1px solid #262626;
+      padding:1vw 4vw;
+      border-radius:5px;
+      margin-right:5vw;
+}
+section.btn-line .btn {
+  margin-top:5vw;
+      background:#626262;
+      border:1px solid #262626;
+      padding:1vw 4vw;
+      border-radius:5px;
+      margin-right:5vw;
+  
 }

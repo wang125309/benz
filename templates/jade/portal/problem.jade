@@ -2,7 +2,7 @@ include ./lib/header.jade
     link(href="/static/css/portal/problem.css",rel="stylesheet",type="text/css")
     script(src="/static/js/portal/problem.min.js")
     body
-        div.body
+        div.body(data-taskid="{{ taskid }}")
             include ./lib/title.jade
             div.problem-num
                 span Q

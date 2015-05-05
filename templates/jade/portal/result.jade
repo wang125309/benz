@@ -1,5 +1,6 @@
 include ./lib/header.jade
     link(href="/static/css/portal/result.css",rel="stylesheet",type="text/css")
+    script(src="/static/js/portal/result.min.js")
     body
         div.body
             include ./lib/title.jade
@@ -24,7 +25,7 @@ include ./lib/header.jade
             {% elif taskname == 'getFirst' %}
             div.banner(style="background:url('/static/image/get-first-banner.jpg') center no-repeat;")=""
             {% endif %}
-            div.main-area
+            div.main-area(data-task="{{ taskname }}")
                 {% if taskname == 'littleCource' %}
                 div.title 小课堂
                 {% elif taskname == 'bigBuy' %}
@@ -46,18 +47,38 @@ include ./lib/header.jade
                 {% elif taskname == 'getFirst' %}
                 div.title 抢占先机
                 {% endif %}
-                {% if needScan == True %}
+                {% if needScan == True %} 
+                {% if joined == 0 %}
                 div.sub-status 未完成
+                {% else %}
+                div.sub-status 已完成
+                {% endif %}
+                {% if joined == 0 %}
                 div.needScan
                     span 您已体验此区域
                     span.white 请点击完成按钮完成体验
                 div.complate 
                     button.complate-btn 完成
                 {% else %}
+                div.needScan
+                    span 您已体验此区域 
+                    span.white 不能重复体验 
+                {% endif %}
+                {% else %}
+                {% if joined == 0 %}
                 div.sub-status 未完成
+                {% else %}
+                div.sub-status 已完成
+                {% endif %}
+                {% if joined == 0 %}
                 div.needScan
                     span 您已体验此区域
                     span.white 请等待工作人员录入积分 
                 div.complate 
                     button.complate-btn 确定
+                {% else %}
+                div.needScan
+                    span 您已体验此区域 
+                    span.white 不能重复体验 
                 {% endif %}
+                {% endif %} 

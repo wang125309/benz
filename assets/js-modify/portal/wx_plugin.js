@@ -1,23 +1,34 @@
 $(function(){
+    function handleSuccess(position){
+        var lng = position.coords.longitude; 
+        var lat = position.coords.latitude; 
+        $.post("/benz/portal/upload_location/",{
+            "latitude":lat,
+            "longitude":lng
+        },function(d){
+            if(d.status == 'success') {
+            }
+        });
+    }
+    function handleError() {
+    }
+    if (window.navigator.geolocation) {
+        var options = {
+            enableHighAccuracy:true,
+        };
+        window.navigator.geolocation.getCurrentPosition(handleSuccess,handleError,options);
+    }
+    else {
+        alert("浏览器定位失败");
+    }
+
     $.post("/benz/portal/wxconfig/",{
 		"url":location.href
-	},
-	function(data){
+	},function(data){
 		wx.config(data);
 		wx.ready(function(){
             wx.hideOptionMenu();
-            wx.getLocation({
-                success: function (res) {
-                        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                        $.post("/benz/portal/upload_location/",{
-                            "latitude":latitude,
-                            "longitude":longitude
-                        },function(d){
-                        });
-                    }
-                });
-            });
+        });
         wx.error(function(){
             $.get("/benz/portal/update_access_token/",function(){
                 $.post("/benz/portal/wxconfig/",{
@@ -26,17 +37,6 @@ $(function(){
                     wx.config(data);
                     wx.ready(function(){
                         wx.hideOptionMenu();
-                        wx.getLocation({
-                            success: function (res) {
-                                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                                    $.post("/benz/portal/upload_location/",{
-                                        "latitude":latitude,
-                                        "longitude":longitude
-                                        },function(d){
-                                        });
-                            }
-                        });
                     });
                 });
             });

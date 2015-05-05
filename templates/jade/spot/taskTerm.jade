@@ -5,20 +5,36 @@ link(href="/static/css/spot/taskTerm.css",rel="stylesheet",type="text/css")
 script(src="/static/js/spot/taskTerm.min.js",language="javascript")
 
 body
-    div.body
+    div.body(data-taskid="{{ taskid }}")
         section.register
             button.register(type="button") 手动添加
         section.main
-            div.title xx项目选择参与者
-            div(data-term="{{term}}", data-taskid="{{taskid}}").handAdd
-                div.input-area
-                    span.username 用户名：
-                    input.user-text#username(type="text")
-                div.btn-line
-                    button.btn#adduser-btn(type="button") 添加
-                    button.btn#adduser-cancel(type="button") 取消
+            {% if term == 'five-can' %}
+            div.title 五项全能项目选择参与者
+            {% elif term == 'drive-success' %}
+            div.title 非凡驾驶项目选择参与者
+            {% elif term == 'throw-money' %}
+            div.title 一掷千金项目选择参与者
+            {% elif term == 'little-cource' %}
+            div.title 小课堂项目选择参与者
+            {% elif term == 'big-buy' %}
+            div.title 大富翁项目选择参与者
+            {% elif term == 'option' %}
+            div.title 定点操纵项目选择参与者
+            {% elif term == 'hot-person' %}
+            div.title 积赞大师项目选择参与者
+            {% elif term == 'get-first' %}
+            div.title 抢占先机项目选择参与者
+            {% elif term == 'space-rebuild' %}
+            div.title 空间重塑项目选择参与者
+            {% elif term == 'perfect-in' %}
+            div.title 完美入位项目选择参与者
+            {% endif %}
+
             div(data-term="{{term}}").scoreAdd
-                div.title 得分
+                div.title 
+                    span.code=""
+                    span 得分
                 div.input-area
                     input.user-text#score(type="text")
                 div.btn-line
@@ -32,9 +48,11 @@ body
                      th 昵称
                      th 分数
                    {% for i in userList %}
-                   tr(data-id="{{i.id}}", data-score="{{i.score}}").user-tr
-                     td.td-id {{ i.id }}
+                   tr(data-id="{{ i.id }}",data-code="{{ i.code }}", data-score="{{i.score}}").user-tr
+                     td.td-id {{ i.code }}
                      td.td-name {{ i.name }}
                      td.td-curtain {{ i.nickname  }}
                      td.td-score {{ i.score  }}
                    {% endfor %}
+        section.btn-line
+            button.btn.submit 提交 

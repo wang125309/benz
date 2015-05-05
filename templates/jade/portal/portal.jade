@@ -32,20 +32,50 @@ include ./lib/header.jade
                 div.p4-title=""
                 div.button-area
                     div.line
-                        div.left-button.little-cource=""
+                        div.left-button.little-cource
+                            {% if user.littleCourceJoined %}
+                            div.correct=""
+                            {% endif %}
                         div.right-button.space-rebuild=""
+                            {% if user.spaceRebuild %}
+                            div.correct=""
+                            {% endif %}
                     div.line
                         div.left-button.five-can=""
+                            {% if user.fiveCanJoined %}
+                            div.correct=""
+                            {% endif %}
                         div.right-button.option=""
+                            {% if user.optionJoined %}
+                            div.correct=""
+                            {% endif %}
                     div.line
                         div.left-button.get-first=""
+                            {% if user.getFirstJoined %}
+                            div.correct=""
+                            {% endif %}
                         div.right-button.perfect-in=""
+                            {% if user.perfectInJoined %}
+                            div.correct=""
+                            {% endif %}
                     div.line
                         div.left-button.big-buy=""
+                            {% if user.bigBuyJoined %}
+                            div.correct=""
+                            {% endif %}
                         div.right-button.drive-success=""
+                            {% if user.driveSuccessJoined %}
+                            div.correct=""
+                            {% endif %}
                     div.line
                         div.left-button.hot-person=""
+                            {% if user.hotPersonJoined %}
+                            div.correct=""
+                            {% endif %}
                         div.right-button.throw-money=""
+                            {% if user.throwMoneyJoined %}
+                            div.correct=""
+                            {% endif %}
                 div.footer
                     div.know-more=""
                     div.tab-map=""

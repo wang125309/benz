@@ -2,11 +2,10 @@ include ./lib/header.jade
 link(href="{{ STATIC_URL }}css/backend/userList.css",rel="stylesheet",type="text/css")
 div.subheader.clearfix
     div.left-area.clearfix
-        {% if userPri == '2' %}
+        {% if userPri == '2' and allow == 'all' %}
         div.btn#addUser 增加人员
         {% endif %}
     div.right-area.clearfix
-        div.btn#changePassword 修改密码
         div.btn#quit 退出
 div.main
     div.table-user
@@ -14,9 +13,10 @@ div.main
             th 编号
             th 姓名
             th 当前权限
-            {% if userPri == '2' %}
+            {% if userPri == '2'  %}
             th 操作
             {% endif %}
+            th 所属活动
             {% for i in user %}
             tr
                 td {{ i.id }}
@@ -24,9 +24,12 @@ div.main
                 td {% if i.pri == '2' %}管理员{% else %}现场成员{% endif %}
                 {% if userPri == '2' %}
                 td 
+                    {% if allow == 'all' %}
                     a(href="javascript:;",class="opt",data-id="{{ i.id }}") 编辑
                     a(href="javascript:;",class="del",data-id="{{ i.id }}") 删除
                     {% endif %}
+                    {% endif %}
+                td {{ i.task }}
             {% endfor %}
 div.menu#del-menu
     div.title 删除成员
@@ -60,6 +63,14 @@ div.menu#edit-user
                 div.radio
                     input#controller(type="radio",name="usertype")
                     label(for="controller") 管理员
+        div.task
+            div.left-area.clearfix 管理活动:
+            div.right-area
+                div.select
+                    select.task
+                        {% for i in task %}
+                        option {{ i.id }}、{{ i.taskname }}
+                        {% endfor %}
         div.btn-line.clearfix
             div.btn-area
                 div.btn.save.clearfix 保存

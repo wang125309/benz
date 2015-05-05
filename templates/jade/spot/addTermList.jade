@@ -1,0 +1,30 @@
+include ./lib/header.jade
+link(href="/static/css/spot/chooseTask.css",rel="stylesheet",type="text/css")
+script(src="/static/js/spot/chooseTask.min.js",language="javascript")
+link(href="/static/css/spot/taskTerm.css",rel="stylesheet",type="text/css")
+script(src="/static/js/spot/taskTerm.min.js",language="javascript")
+
+body
+    div.body(data-term="{{ term }}",data-taskid="{{ taskid }}")
+        div.addMenu
+            div.title-spot 
+                span.first 确定把用户
+                span.username = ""
+                span 加入到当前项目里吗？
+            div.btn-line
+                button.btn.sure 确定
+                button.btn.cancel 取消 
+        div.userList
+            table.userTable
+                tr
+                    th 分配号
+                    th 姓名
+                    th 手机号
+                {% for i in user %}
+                tr.addtoterm(data-id="{{ i.id }}")
+                    td {{ i.giveNum }}
+                    td {{ i.nickname }}
+                    td {{ i.phone }} 
+                {% endfor %}
+        div.btn-line
+            button.btn.ok 确定

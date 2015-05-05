@@ -5,16 +5,14 @@ html(lang="en")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/sign.min.js")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/rankCtrl.min.js")
         link(href="{{ STATIC_URL }}css/backend/sign.css",rel="stylesheet",type="text/css")
-body
+body(ng-app="app")
     div.left-wall
         div.wall-text 签到墙
-        div.wall-data
-            {% for i in user %}
-            div.card.base-infinite.fly
-                div.avatar(style="background:url({{ i.headimgurl }})")=""
-                div.nickname {{ i.nickname }}
-            {% endfor %}
-    div(ng-controller="rankCtrl").right-rank
+        div.wall-data(ng-controller="rankCtrl",ng-cloak)
+            div.card.base-infinite.fly(ng-repeat="i in users.user",class="avatar{[{ i.id }]}")
+                div.avatar(style="background:url({[{ i.headimgurl }]})")=""
+                div.nickname {[{ i.nickname }]}
+    div.right-rank
         div.rank-text 积分排行榜
         {% for rankList in rankLists %}
         div.rank

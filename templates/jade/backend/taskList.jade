@@ -6,16 +6,15 @@ div.subheader.clearfix
         div.btn#addTask 增加场次
         {% endif %}
     div.right-area.clearfix
-        div.btn#changePassword 修改密码
         div.btn#quit 退出
 div.main
     div.table-user
         table.tbl
             th 活动编号
-            th 活动列表
+            th(style="width:80px;") 活动列表
             th 活动日期
             {% if userPri == '2' %}
-            th 操作
+            th(style="width:80px;") 操作
             {% endif %}
             {% for i in taskList %}
             tr
@@ -23,9 +22,17 @@ div.main
                 td {{ i.taskname }}
                 td {{ i.taskdate }}
                 {% if userPri == '2'  %}
-                td 
+                td
+                    {% if allow == 'all' %}
                     a(href="javascript:;" class="opt" data-id="{{ i.id }}") 编辑
                     a(href="javascript:;" class="del" data-id="{{ i.id }}") 删除
+                    {% endif %}
+                    {% if allow == i.id or allow == 'all' %}
+
+                    a(href="javascript:;" class="rank" data-id="{{ i.id }}") 进入排行
+                    a(href="javascript:;" class="problem" data-id="{{ i.id }}") 进入答题
+                    a(href="javascript:;" class="clear" data-id="{{ i.id }}") 结束本场 
+                    {% endif %}
                 {% endif %}
             {% endfor %}
 div.menu#del-menu

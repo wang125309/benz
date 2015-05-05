@@ -29,6 +29,12 @@ $(function(){
             $("#taskdate").val(d.data.taskdate);
         });
     });
+    $(".rank").on("click",function(){
+        location.href = '/benz/backend/sign/?id='+$(this).data("id");
+    });
+    $(".problem").on("click",function(){
+        location.href = '/benz/backend/problem/?taskid='+$(this).data("id");
+    });
     $("#addTask").on("click",function(){
         saved = 0;
         edit_id = 0
@@ -37,7 +43,16 @@ $(function(){
         $("#taskdate").val("");
         $("#taskcity").val("");
     });
-
+    $(".clear").on("click",function(){
+        $.get("/benz/backend/clear/?id="+$(this).data("id"),function(d){
+            if(d.status == 'success') {
+                alert("榜单已清空");
+            }
+            else {
+                alert("后台出现了问题");
+            }
+        }); 
+    });
     $(".save").on("click",function(){
         if(!saved) {
             $.post("/benz/backend/saveTask/?id="+edit_id,{

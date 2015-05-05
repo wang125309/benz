@@ -42,3 +42,13 @@ class UserTaskProject(models.Model):
     getFirstJoined = models.IntegerField(null=True)
     giveNum = models.CharField(max_length=127, null=True)
     total_score = models.IntegerField(null=True)
+    clear = models.IntegerField(null=True)
+    register = models.IntegerField(null=True)
+    submit = models.IntegerField(null=True)
+    phone = models.CharField(max_length=127,null=True)
+
+class TaskLocation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    date = models.CharField(max_length=127,null=True)
+    lon = models.CharField(max_length=127,null=True)
+    lat = models.CharField(max_length=127,null=True)

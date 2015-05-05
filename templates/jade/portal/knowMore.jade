@@ -1,7 +1,12 @@
 include ./lib/header.jade
-    script(language="javascript",src="/static/js/portal/showDetail.js")
+    script(language="javascript",src="/static/js/portal/knowMore.min.js")
     link(href="/static/css/portal/knowMore.css",rel="stylesheet",type="text/css")
     body
         include ./lib/title.jade
-        section.score-rules=""
-        section.each-area=""
+        img.score-rules(src="/static/image/score-rules.png")
+        img.each-area(src="/static/image/each-area.png")
+        div.bottom-banner
+            div.go-score
+                a(href="#score") 积分规则
+            div.go-area
+                a(href="#area") 各区体验规则

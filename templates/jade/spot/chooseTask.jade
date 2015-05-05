@@ -20,3 +20,14 @@ body
                 div(data-task_id="{{task_id}}" data-term="perfect-in").item.perfect-in 完美入位
                 div(data-task_id="{{task_id}}" data-term="driver-success").item.drive-success 非凡驾驶
                 div(data-task_id="{{task_id}}" data-term="throw-money").item.throw-money 一掷千金
+        div.handAdd(data-taskid="{{task_id}}")
+            div.input-area
+                div
+                    span.username 用户名：
+                    input.user-text#username(type="text")
+                div
+                    span.phone 手机号：
+                    input.user-text#phone(type="text")
+            div.btn-line
+                button.btn#adduser-btn(type="button") 添加
+                button.btn#adduser-cancel(type="button") 取消

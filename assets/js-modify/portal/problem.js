@@ -5,6 +5,14 @@ require("./wx_plugin.js");
 
 $(function(){
     var answered = false;
+    var result = function(res) {
+        if(res.status == 'true') {
+            alert("您已经答对5道题，并且获得积分");
+            setTimeout(function(){
+                location.href = '/benz/portal/portal/';    
+            },1000);
+        }
+    };
     $(".A").on("click",function(){
         if(answered == false) {
             answered = true;
@@ -15,7 +23,7 @@ $(function(){
                             "background-image":"url('/static/image/correct.png')"
                         });
                         $.get("/benz/portal/right/",function(res) {
-
+                            result(res);             
                         });
                     }
                     else {
@@ -38,7 +46,7 @@ $(function(){
                             "background-image":"url('/static/image/correct.png')"
                         });
                         $.get("/benz/portal/right/",function(res) {
-                        
+                            result(res);             
                         });
                     }
                     else {
@@ -61,6 +69,7 @@ $(function(){
                         });
                         $.get("/benz/portal/right/",function(res) {
                         
+                            result(res);             
                         });
                     }
                     else {
@@ -83,6 +92,7 @@ $(function(){
                         });
                         $.get("/benz/portal/right/",function(res) {
                         
+                            result(res);             
                         });
                     }
                     else {
@@ -96,7 +106,7 @@ $(function(){
     });
     var u = navigator.userAgent;
     if(u.indexOf('iPhone')>-1) {
-        $.get("/benz/portal/getProblemId/",function(d){
+        $.get("/benz/portal/getProblemId/?taskid="+$(".body").data("taskid"),function(d){
             if(d.status == 'success') {
                 if(d.problemId != $(".num").text()) {
                     location.href = location.href;

@@ -27,6 +27,7 @@ $(function(){
         $.get("/benz/backend/getUserMessage/?id="+$(this).data("id"),function(d){
             $("#username").val(d.data.username);
             $("#password").val(d.data.password);
+            $("select.task").val(d.data.task);
             if(d.data.type == 1) {
                 $("#normal").prop({"checked":"checked"});
             }
@@ -57,7 +58,8 @@ $(function(){
             $.post("/benz/backend/saveUser/?id="+edit_id,{
                 "username":$("#username").val(),
                 "password":$("#password").val(),
-                "pri":pri
+                "pri":pri,
+                "taskid":$("select.task").val()
             },function(d){
                 if(d.status == "success") {
                     location.href = location.href;

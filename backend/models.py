@@ -5,6 +5,7 @@ class User(models.Model):
     username = models.CharField(max_length=127,unique=True)
     password = models.CharField(max_length=127)
     pri = models.CharField(max_length=127)
+    taskid = models.CharField(max_length=127)
 
 class Task(models.Model):
     taskname = models.CharField(max_length=127,unique=True)

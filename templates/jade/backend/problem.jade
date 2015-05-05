@@ -5,14 +5,14 @@ html(lang="en")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/problem.min.js")
         link(href="{{ STATIC_URL }}css/backend/problem.css",rel="stylesheet",type="text/css")
 body
-    input(type="hidden",data-id="{{id}}",id="id")
+    input(type="hidden",data-taskid="{{ taskid }}",data-id="{{ id }}",id="id")
     div.time 倒计时:
         span.num 30 
         span.second S            
     div.main
         div.left-area
             div.number Q{{ id }}
-            div.answer=""
+            div.answer(style="background:url('/static/image/ads/{{ imgid }}.jpg') no-repeat;background-position:center;background-size:cover;")=""
             div.process
                 div.process-sub.s1=""
                 div.process-sub.s2=""

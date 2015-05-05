@@ -44,7 +44,9 @@ gulp.task('sass-spot',function(){
 
 gulp.task('sass-back',function(){
     gulp.src('./assets/css-modify/backend/*.sass')
-        .pipe(sass())
+        .pipe(sass({
+            errLogToConsole:true
+        }))
         .pipe(css_minify())
         .pipe(gulp.dest('./assets/css/backend/'));
 });
@@ -61,9 +63,10 @@ gulp.task('sass',function(){
         .pipe(gulp.dest('./assets/css'));
 });
 
-var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','backend/problem','spot/login','portal/showDetail','backend/sign','portal/problem'];
+
 
 gulp.task('js',function(){
+    var js_files_backend = ['backend/login','backend/index','backend/userList','backend/taskList','backend/bonus','backend/share','backend/weixin','portal/portal','portal/login','portal/taskList','backend/problem','spot/login','portal/showDetail','backend/sign','portal/problem','portal/result','portal/knowMore','portal/mapMode'];
     for (i in js_files_backend) {
         gulp.src('./assets/js-modify/'+js_files_backend[i]+'.js')
 			.pipe(browserify())
@@ -92,11 +95,10 @@ var js_files_backend = ['sign', 'rankCtrl'];
 gulp.task('js-backend', function(){
     for(i in js_files_backend){
     gulp.src('./assets/js-modify/backend/'+ js_files_backend[i]+'.js')
-    .pipe(browserify())
     .pipe(concat('.js'))
+        .pipe(browserify())
     .pipe(gulp.dest('./assets/js/backend'))
     .pipe(rename(js_files_backend[i]+'.min.js'))
-    .pipe(uglify())
     .pipe(gulp.dest('./assets/js/backend'));
     }
 })

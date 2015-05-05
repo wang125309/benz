@@ -1,0 +1,13 @@
+include ./lib/header.jade
+    link(href="/static/css/portal/scoreRank.css",rel="stylesheet",type="text/css")
+    body
+        div.body
+            include ./lib/title.jade
+        div.score-area
+            div.title 您目前的分数为
+            div.score {{ score }}
+        div.rank
+            div.title 您目前的排名为
+            div.score {{ rank }}
+        div.btn-line
+            a(href="/benz/portal/portal/#menu") 确定

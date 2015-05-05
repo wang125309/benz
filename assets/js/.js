@@ -2,10 +2,10 @@
 $ = require("../../../bower_components/jquery/dist/jquery.js");
 
 $(function(){
-    $.get("/benz/backend/getProblemId/",function(d){
+    $.get("/benz/backend/getProblemId/?taskid="+$("#id").data("taskid"),function(d){
         console.log(d.problemId);
         if(d.problemId != $("#id").data("id")) {
-            location.href = "/benz/backend/problem/?id="+d.problemId; 
+            location.href = location.href; 
         }
         else {
             setInterval(function(){
@@ -14,8 +14,8 @@ $(function(){
                 });
                 $(".num").html($(".num").html()-1);
                 if($(".num").html() <= '0') {
-                    $.get("/benz/backend/setProblemId/?id="+parseInt($("#id").data("id")+1),function(){
-                        location.href = "/benz/backend/problem/?id="+parseInt($("#id").data("id")+1);
+                    $.get("/benz/backend/setProblemId/?taskid="+$("#id").data("taskid"),function(){
+                        location.href = location.href;
                     });
                 }
             },1000);
@@ -9230,7 +9230,30 @@ return jQuery;
 
 }));
 
-},{}]},{},[1])ery.fn.andSelf = jQuery.fn.addBack;
+},{}]},{},[1])ody[ "scroll" + name ], doc[ "scroll" + name ],
+						elem.body[ "offset" + name ], doc[ "offset" + name ],
+						doc[ "client" + name ]
+					);
+				}
+
+				return value === undefined ?
+					// Get width or height on the element, requesting but not forcing parseFloat
+					jQuery.css( elem, type, extra ) :
+
+					// Set width or height on the element
+					jQuery.style( elem, type, value, extra );
+			}, type, chainable ? margin : undefined, chainable, null );
+		};
+	});
+});
+
+
+// The number of elements contained in the matched element set
+jQuery.fn.size = function() {
+	return this.length;
+};
+
+jQuery.fn.andSelf = jQuery.fn.addBack;
 
 
 
@@ -9270,27 +9293,6 @@ jQuery.noConflict = function( deep ) {
 	}
 
 	if ( deep && window.jQuery === jQuery ) {
-		window.jQuery = _jQuery;
-	}
-
-	return jQuery;
-};
-
-// Expose jQuery and $ identifiers, even in AMD
-// (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
-// and CommonJS for browser emulators (#13566)
-if ( typeof noGlobal === strundefined ) {
-	window.jQuery = window.$ = jQuery;
-}
-
-
-
-
-return jQuery;
-
-}));
-
-},{}]},{},[1]) deep && window.jQuery === jQuery ) {
 		window.jQuery = _jQuery;
 	}
 

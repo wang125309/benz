@@ -9,7 +9,7 @@ window.onload = function() {
             "password":$(".password-text").val()
             },function(d){
             if(d.status == 'success') {
-                location.href = location.href;    
+                location.href = "/benz/spot/chooseList/";    
             }
             else {
                 alert(d.reason); 

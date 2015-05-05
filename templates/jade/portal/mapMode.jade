@@ -4,6 +4,57 @@ include ./lib/header.jade
     body
         div.body
             include ./lib/title.jade
+            {% if u.littleCourceJoined != 1 %}
+            div.littleCource(style="background:url('/static/image/littleCourceCircle.png') no-repeat;")=""
+            {% else %}
+            div.littleCource(style="background:url('/static/image/littleCourceCircleAlready.png') no-repeat;")=""
+            
+            {% endif %}
+            {% if u.fiveCanJoined != 1 %}
+            div.fiveCan(style="background:url('/static/image/fiveCanCircle.png') no-repeat;")=""
+            {% else %}
+            div.fiveCan(style="background:url('/static/image/fiveCanCircleAlready.png') no-repeat;")=""
+            {% endif %}
+            {% if u.getFirstJoined != 1 %}
+            div.getFirst(style="background:url('/static/image/getFirstCircle.png') no-repeat;")=""
+            {% else %}
+            div.getFirst(style="background:url('/static/image/getFirstCircleAlready.png') no-repeat;")=""
+            {% endif %}
+            {% if u.bigBuyJoined != 1 %}
+            div.bigBuy(style="background:url('/static/image/bigBuyCircle.png') no-repeat;")=""
+            {% else %}
+            div.bigBuy(style="background:url('/static/image/bigBuyCircleAlready.png') no-repeat")=""
+            {% endif %}
+            {% if u.hotPersonJoined != 1 %}
+            div.hotPerson(style="background:url('/static/image/hotPersonCircle.png') no-repeat")=""
+            {% else %}
+            div.hotPerson(style="background:url('/static/image/hotPersonCircleAlready.png') no-repeat")=""
+            {% endif %}
+            {% if u.spaceRebuildJoined != 1 %}
+            div.spaceRebuild(style="background:url('/static/image/spaceRebuildCircle.png') no-repeat")=""
+            {% else %}
+            div.spaceRebuild(style="background:url('/static/image/spaceRebuildCircleAlready.png') no-repeat")=""
+            {% endif %}
+            {% if u.optionJoined != 1 %}
+            div.option(style="background:url('/static/image/optionCircle.png') no-repeat")=""
+            {% else %}
+            div.option(style="background:url('/static/image/optionCircleAlready.png') no-repeat")=""
+            {% endif %}
+            {% if u.perfectInJoined != 1 %}
+            div.perfectIn(style="background:url('/static/image/perfectInCircle.png') no-repeat")=""
+            {% else %}
+            div.perfectIn(style="background:url('/static/image/perfectInCircleAlready.png') no-repeat")=""
+            {% endif %}
+            {% if u.driveSuccessJoined != 1 %}
+            div.driveSuccess(style="background:url('/static/image/driveSuccessCircle.png') no-repeat")=""
+            {% else %}
+            div.driveSuccess(style="background:url('/static/image/driveSuccessCircleAlready.png') no-repeat")=""
+            {% endif %}
+            {% if u.throwMoneyJoined != 1 %}
+            div.throwMoney(style="background:url('/static/image/throwMoneyCircle.png') no-repeat")=""
+            {% else %}
+            div.throwMoney(style="background:url('/static/image/throwMoneyCircleAlready.png') no-repeat")=""
+            {% endif %}
             div.footer
                 div.know-more=""
                 div.tab-map=""

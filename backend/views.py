@@ -20,6 +20,19 @@ sys.setdefaultencoding('UTF-8')
 
 logger = logging.getLogger(__name__)
 
+def allowPri(func):
+    def _allowPri(request):
+        if request.session.get("username",False) and not request.session.get("allow") :
+            if request.session.get("username") == 'root':
+                request.session["allow"] = 'all'
+            else:
+                u = User.objects.get(username=request.session.get("username"))
+                request.session['allow'] = int(u.taskid)
+            return func(request)
+        else:
+            return func(request)
+    return _allowPri
+
 def login(request):
     if request.session.get("username",False):
         return HttpResponseRedirect("/benz/backend/userList/")
@@ -48,25 +61,40 @@ def quitAction(request):
         })
     else:
         request.session['username'] = ""
+        request.session['allow'] = ''
         return JsonResponse({
             "status":"success"
         })
+
 
 @loginNeed
 def getUserMessage(request):
     id = request.GET['id']
     try:
         user = User.objects.get(id = id)
-        type = user.pri
-        return JsonResponse({
-            "status":"success",
-            "data": {
-                "username":user.username,
-                "password":user.password,
-                "type":type
-            }
-        })
+        pri = user.pri
+        if user.taskid :
+            t = Task.objects.get(id=user.taskid)
+            return JsonResponse({
+                "status":"success",
+                "data": {
+                    "username":user.username,
+                    "password":user.password,
+                    "pri":user.pri,
+                    "taskid":str(t.id)+"、"+t.taskname
+                }
+            })
+        else :
+            return JsonResponse({
+                "status":"success",
+                "data": {
+                    "username":user.username,
+                    "password":user.password,
+                    "pri":user.pri
+                }
+            })
     except Exception,e:
+        print e
         return JsonResponse({
             "status":"no such user"
         })
@@ -94,7 +122,6 @@ def loginAction(request):
     password = request.GET['password']
     try:
         u = User.objects.get(username=user)
-        print u.password
         if(u.password == password):
             createSession(request,user)
         else :
@@ -111,40 +138,49 @@ def loginAction(request):
 
 @loginNeed
 def problem(request):
-    if request.GET.get("id",False):
-        id = request.GET['id']
-        if int(id) >= 44:
-            return HttpResponseRedirect("/benz/backend/problem/?id=1")
-        try:
-            p = Problem.objects.get(id=id)
-            return render(request,"backend/problem.html",{
-                "id":id,
-                "problem":p.problem,
-                "A":p.A,
-                "B":p.B,
-                "C":p.C,
-                "D":p.D
-            })
-        except Exception,e:
-            return JsonResponse({
-                "status":"fail",
-                "reason":"没有此题目"
-            })
+    if request.GET.get("taskid",False):
+        taskid = request.GET['taskid']
+        if not cache.get("problemId"+taskid):
+            cache.set("problemId"+taskid,1,settings.NEVER_REDIS_TIMEOUT)
+        problemId = cache.get("problemId"+taskid)
+        p = Problem.objects.get(id=problemId)
+        imgid = int(problemId)%10+1
+        return render(request,"backend/problem.html",{
+            "id":problemId,
+            "taskid":taskid,
+            "problem":p.problem,
+            "A":p.A,
+            "B":p.B,
+            "C":p.C,
+            "D":p.D,
+            "imgid":imgid
+        })
     else :
         return HttpResponseRedirect("/benz/backend/userList/")
 
 @loginNeed
+@allowPri
 def userList(request):
     u = User.objects.all()
     res = []
     for i in u:
-        a = {"id":i.id,"username":i.username,"pri":i.pri}
+        if i.taskid :
+            t = Task.objects.get(id=i.taskid)
+            a = {"id":i.id,"username":i.username,"pri":i.pri,"task":t.taskname}
+        else :
+            a = {"id":i.id,"username":i.username,"pri":i.pri}
         res.append(a)
     u = User.objects.get(username = request.session['username'])
-    
+    t = Task.objects.all()
+    task = []
+    for i in t:
+        a = {"id":i.id,"taskname":i.taskname}
+        task.append(a)
     return render(request,"backend/userList.html",{
         "user":res,
-        "userPri":u.pri
+        "userPri":u.pri,
+        "allow":request.session['allow'],
+        "task":task
     })
 
 @loginNeed
@@ -207,13 +243,15 @@ def deleteTask(request):
         })
 
 def getProblemId(request):
-    if cache.get("problemId") and int(cache.get("problemId")) < 44:
+    taskid = request.GET['taskid']
+    
+    if cache.get("problemId"+taskid) and int(cache.get("problemId"+taskid)) < 44:
         return JsonResponse({
             "status":"success",
-            "problemId":cache.get("problemId")
+            "problemId":cache.get("problemId"+taskid)
         })
     else :
-        cache.set("problemId",1,settings.NEVER_REDIS_TIMEOUT)
+        cache.set("problemId"+taskid,1,settings.NEVER_REDIS_TIMEOUT)
         return JsonResponse({
             "status":"success",
             "problemId":1
@@ -221,9 +259,16 @@ def getProblemId(request):
 
 @loginNeed
 def setProblemId(request):
-    cache.set("problemId",request.GET['id'],settings.NEVER_REDIS_TIMEOUT)
+    taskid = request.GET['taskid']
+    if not cache.get("problemId"+taskid):
+        cache.set("problemId"+taskid,1,settings.NEVER_REDIS_TIMEOUT)
+    else :
+        if int(cache.get("problemId"+taskid)) < 43:
+            cache.set("problemId"+taskid,cache.get("problemId"+taskid)+1,settings.NEVER_REDIS_TIMEOUT)
+        else :
+            cache.set("problemId"+taskid,1,settings.NEVER_REDIS_TIMEOUT)
     return JsonResponse({
-        "status":"success"
+        "status":"success",
     })
 
 @loginNeed
@@ -234,20 +279,24 @@ def userSource(request):
         a = {"id":i.id,"username":i.username,"pri":i.pri}
         res.append(a)
     return JsonResponse({
-        "user":res
+        "user":res,
+
     })
 
 @loginNeed
+@allowPri
 def saveUser(request):
     if request.GET.get("id",False) and request.GET['id'] != '0':
         username = request.POST['username']
         password = request.POST['password']
         pri = request.POST['pri']
+        task = request.POST['taskid']
         if username and password and pri:
             u = User.objects.get(id = request.GET['id'])
             u.username = username
             u.password = password
             u.pri = pri
+            u.taskid = task.split("、")[0]
             u.save()
             return JsonResponse({
                 "status":"success"
@@ -278,40 +327,42 @@ def saveUser(request):
             })
 
 @loginNeed
+@allowPri
 def taskList(request):
     taskList = Task.objects.all()
     me = User.objects.get(username = request.session['username'])
     userPri = me.pri
     return render(request,"backend/taskList.html",{
         "taskList":taskList,
-        "userPri":userPri
+        "userPri":userPri,
+        "allow":request.session['allow']
     })
 
 @loginNeed
 def sign(request):
-    users = usertaskProject.objects.all().order_by("-total_score")[0:10].reverse()
+    users = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0).order_by("-id").exclude(clear=1)[0:20].reverse()
     rank_lists = []
-
     def get_rank_list(rank_user_list):
         rank_list = []
         for key, item in enumerate(rank_user_list):
             rank = {'color': 'red'}
-            if (key+1)%2==0:
+            if (key)%3==1:
                 rank['color'] = 'green'
-            elif (key+1)%3==0:
+            elif (key)%3==2:
                 rank['color'] = 'gray'
-            rank['nickname'] = getattr(item, 'nickname')
+            rank['nickname'] = getattr(item, 'nickname') 
             rank['rank'] = key + 1
             rank['total_score'] = getattr(item, 'total_score') or 0
             rank_list.append(rank)
         return rank_list
-
     try:
-        rank_users = usertaskProject.objects.all().order_by("-total_score")[0:40]
-        rank_first = get_rank_list(rank_users[:20])
+        rank_users = usertaskProject.objects.all().filter(taskid=request.GET['id']).order_by("-total_score").exclude(clear=1)[0:60]
+        rank_first = get_rank_list(rank_users[:30])
         if rank_first:
             rank_lists.append(rank_first)
-        rank_second = get_rank_list(rank_users[20:])
+        rank_second = get_rank_list(rank_users[30:])
+        for i in xrange(len(rank_second)):
+            rank_second[i]['rank'] += 30
         if rank_second:
             rank_lists.append(rank_second)
     except Exception as e:
@@ -324,15 +375,15 @@ def sign(request):
 
 @loginNeed
 def sign_rank(request):
-    users = usertaskProject.objects.all().order_by("-id")[0:10].reverse()
+    users = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0).order_by("-id")[0:10].reverse()
     rank_lists = []
     def get_rank_list(rank_user_list):
         rank_list = []
         for key, item in enumerate(rank_user_list):
             rank = {'color': 'red'}
-            if (key+1)%2==0:
+            if key%3==1:
                 rank['color'] = 'green'
-            elif (key+1)%3==0:
+            elif key%3==2:
                 rank['color'] = 'gray'
             rank['nickname'] = getattr(item, 'nickname')
             rank['rank'] = key + 1
@@ -341,7 +392,7 @@ def sign_rank(request):
         return rank_list
 
     try:
-        rank_users = usertaskProject.objects.all().order_by("total_score")[0:40]
+        rank_users = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0).order_by("total_score")[0:40]
         rank_first = get_rank_list(rank_users[:20])
         if rank_first:
             rank_lists.append(rank_first)
@@ -355,6 +406,32 @@ def sign_rank(request):
         "rankLists": rank_lists
     })
 
+def getSignWall(request):
+    user = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0).exclude(register=1).order_by("-id")[0:20]
+    userall = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0)
+    users = []
+    cnt = 0
+    for i in user:
+        cnt += 1
+        a = {}
+        a['nickname'] = i.nickname
+        a['headimgurl'] = i.headimgurl
+        a['id'] = cnt
+        users.append(a)
+    return JsonResponse({
+        "user": users,
+    })
+
+@loginNeed
+def clear(request):
+    taskId = request.GET.get("id")
+    u = usertaskProject.objects.all().filter(taskid = taskId)
+    for i in u:
+        i.clear = 1
+        i.save()
+    return JsonResponse({
+        "status":"success"
+    })
 
 @loginNeed
 def signMessage(request):
@@ -365,6 +442,7 @@ def signMessage(request):
     return JsonResponse({
         "user":u    
     })
+
 @loginNeed
 def saveTask(request):
     taskname = request.POST['taskname']

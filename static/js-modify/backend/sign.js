@@ -2,7 +2,7 @@ $ = require("../../../bower_components/jquery/dist/jquery.js");
 $(function(){
     h = $(window).height();
     w = $(window).width();
-
+    ph = (h-100)/30;
     function getQueryParams(name,url) {
         if(!url)url = location.href;
         name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");

@@ -7,7 +7,7 @@ var uglify = require('gulp-uglify');
 var jade = require('gulp-jade');
 var css_minify = require('gulp-minify-css');
 var browserify = require('gulp-browserify');
-
+var base64 = require('gulp-base64');
 gulp.task('lint',function(){
     gulp.src('./assets/js-modify/*.js')
         .pipe(jshint())
@@ -18,6 +18,7 @@ gulp.task('sass-portal-lib',function(){
     gulp.src('./assets/css-modify/portal/lib/*.sass')
         .pipe(sass())
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css/portal/lib/'));
     });
 
@@ -25,6 +26,7 @@ gulp.task('sass-portal',function(){
     gulp.src('./assets/css-modify/portal/*.sass')
         .pipe(sass())
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css/portal/'));
     });
 
@@ -32,6 +34,7 @@ gulp.task('sass-spot-lib',function(){
     gulp.src('./assets/css-modify/spot/lib/*.sass')
         .pipe(sass())
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css/spot/lib/'));
     });
 
@@ -39,6 +42,7 @@ gulp.task('sass-spot',function(){
     gulp.src('./assets/css-modify/spot/*.sass')
         .pipe(sass())
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css/spot/'));
     });
 
@@ -48,18 +52,21 @@ gulp.task('sass-back',function(){
             errLogToConsole:true
         }))
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css/backend/'));
 });
 gulp.task('sass-back-lib',function(){
     gulp.src('./assets/css-modify/backend/lib/*.sass')
         .pipe(sass())
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css/backend/lib/'));
 });
 gulp.task('sass',function(){
     gulp.src('./assets/css-modify/*.sass')
         .pipe(sass())
         .pipe(css_minify())
+        .pipe(base64())
         .pipe(gulp.dest('./assets/css'));
 });
 

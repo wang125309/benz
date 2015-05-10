@@ -51,13 +51,15 @@ def getTaskId(request):
 
 def getCode(func):
     def _getCode(request):
-        if not request.session.get("code",False) :
+        taskId = getTaskId(request)            
+        tp = UserTaskProject.objects.filter(openid=request.session['openid'],taskid=taskId)
+        if not request.session.get("code",False) or not tp.count():
             if request.session.get('location',False):
                 pass
-            else :
-                return HttpResponseRedirect("/benz/portal/login/")
+            else:
+                return HttpResponseRedirect("/benz/portal/requestlogin/")
             #获取活动场次
-            taskId = getTaskId(request)            
+
             #FIXME
             #对于这个id就行分配
             utp = UserTaskProject.objects.all().filter(taskid = taskId)
@@ -136,16 +138,10 @@ def wx_login_portal(request):
         return HttpResponseRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri=http%3A%2F%2Fbenz.wxpages.com%2Fbenz%2Fportal%2Flogin%2F&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");    
 
 def loginAction(request):
-    if not cache.get(request.session['openid']) and request.session.get('location',False):
-        cache.set(request.session['openid'],json.dumps({'username':request.GET['username'],'phone':request.GET['phone']}), settings.NEVER_REDIS_TIMEOUT)
-        return JsonResponse({
-            "status":"success"
-        })
-    else:
-        return JsonResponse({
-            "status":"fail",
-            "reason":u"请打开定位"
-        })
+    cache.set(request.session['openid'],json.dumps({'username':request.GET['username'],'phone':request.GET['phone']}), settings.NEVER_REDIS_TIMEOUT)
+    return JsonResponse({
+        "status":"success"
+    })
 
 @need_login
 def login(request):
@@ -160,7 +156,10 @@ def portal(request):
     code = request.session['code']
     type = code[0]
     try:
-        u = UserTaskProject.objects.get(openid = request.session['openid'])
+        u = UserTaskProject.objects.get(openid = request.session['openid'],taskid=getTaskId(request))
+        if not u.phone :
+            u.phone = json.loads(cache.get(request.session['openid'])).get('phone') or ''
+            u.save()
     except Exception,e:
         u = ""
     return render(request,"portal/portal.html",{
@@ -312,23 +311,15 @@ def menu(request):
         "type":type
     })
 
-def getProblemId(request):
-    taskid = getTaskId(request)
-    
-    pid = cache.get("problemId"+str(taskid))
-    while True:
-        if pid != cache.get("problemId"+str(taskid)):
-            return JsonResponse({
-                "status":"success",
-                "problemId":cache.get("problemId"+str(taskid))
-            })
-        else :
-            time.sleep(2)
-
 def answer(request):
     taskid = getTaskId(request)
     problemId = cache.get("problemId"+str(taskid))
     p = Problem.objects.get(id=problemId)
+    u = UserTaskProject.objects.get(openid=request.session['openid'],taskid=taskid)
+    if u.getFirst != 2:
+        u.getFirst = 1
+        u.total_score = u.littleCource + u.spaceRebuild + u.hotPerson + u.fiveCan + u.option + u.perfectIn + u.getFirst
+        u.save()
     if request.GET['answer'] == 'A':
         if p.answer == 'A':
             return JsonResponse({
@@ -379,15 +370,15 @@ def answer(request):
 def right(request):
     if request.session.get('problemRight',False):
         request.session['problemRight'] = int(request.session['problemRight']) + 1
-    else :
+    else:
         request.session['problemRight'] = 1
     if request.session['problemRight'] >= 5:
         if not request.session.get('problemScored',False):
             request.session['problemScored'] = '1'
-            u = UserTaskProject.objects.get(openid=request.session['openid'])
-            u.getFirst = 3
-            u.total_score += 2
+            u = UserTaskProject.objects.get(openid=request.session['openid'],taskid=getTaskId(request))
+            u.getFirst = 2
             u.getFirstJoined = 1
+            u.total_score = u.littleCource + u.spaceRebuild + u.hotPerson + u.fiveCan + u.option + u.perfectIn + u.getFirst
             u.save() 
             return JsonResponse({
                 "status":"true"    
@@ -402,6 +393,14 @@ def right(request):
         })
 
             
+def getProblemId(request):
+    taskid = getTaskId(request)
+    problemId = cache.get("problemId"+str(taskid))
+    return JsonResponse({
+        "status":"success",
+        "problemId":problemId
+    })
+
 @loginNeed
 @getCode
 def problem(request):
@@ -409,12 +408,7 @@ def problem(request):
     type = code[0]
     taskid = getTaskId(request)
     problemId = cache.get("problemId"+str(taskid))
-    u = UserTaskProject.objects.get(openid=request.session['openid'])
-    if not u.getFirstJoined:
-
-        u.total_score += 1
-        u.getFirst = 1
-    u.save()
+    u = UserTaskProject.objects.get(openid=request.session['openid'],taskid=taskid)
     return render(request,"portal/problem.html",{
         "code":request.session['code'],
         "type":type,
@@ -427,7 +421,7 @@ def scoreRank(request):
     code = request.session['code']
     type = code[0]
     try:
-        u = UserTaskProject.objects.get(openid=request.session.get("openid"))
+        u = UserTaskProject.objects.get(openid=request.session.get("openid"),taskid = getTaskId(request))
         user = UserTaskProject.objects.all().filter(taskid=u.taskid).order_by("-total_score")
         cnt = 0
         rank = 0
@@ -469,11 +463,10 @@ def upload_location(request):
 @getCode
 def addScore(request):
     q = request.GET['taskname']
-    u = UserTaskProject.objects.get(openid=request.session['openid'])
+    u = UserTaskProject.objects.get(openid=request.session['openid'],taskid=getTaskId(request))
     if q == 'littleCource':
         if not u.littleCourceJoined :
             u.littleCourceJoined = 1
-            u.total_score += 1
             u.littleCource = 1
         u.littleCourceJoined = 1
     elif q == 'bigBuy':
@@ -481,13 +474,11 @@ def addScore(request):
     elif q == 'spaceRebuild':
         if not u.spaceRebuildJoined :
             u.spaceRebuildJoined = 1
-            u.total_score += 1
             u.spaceRebuild = 1
         u.spaceRebuildJoined = 1
     elif q == 'hotPerson':
         if not u.hotPersonJoined :
             u.hotPerson = 2
-            u.total_score += 2
             u.hotPersonJoined = 1
         u.hotPersonJoined = 1
     elif q == 'driveSuccess':
@@ -495,13 +486,11 @@ def addScore(request):
     elif q == 'fiveCan':
         if not u.fiveCanJoined:
             u.fiveCanJoined = 1
-            u.total_score += 5
             u.fiveCan = 5
         u.fiveCanJoined = 1
     elif q == 'option':
         if not u.optionJoined:
             u.optionJoined = 1
-            u.total_score += 1
             u.option = 1
         u.optionJoined = 1
     elif q == 'throwMoney':
@@ -509,9 +498,9 @@ def addScore(request):
     elif q == 'perfectIn':
         if not u.perfectIn:
             u.perfectInJoined = 1
-            u.total_score += 1
             u.perfectIn = 1
         u.perfectInJoined = 1
+    u.total_score = u.littleCource + u.spaceRebuild + u.hotPerson + u.fiveCan + u.option + u.perfectIn + u.getFirst + u.bigBuy + u.throwMoney + u.driveSuccess
     u.save()
     return JsonResponse({
         "status":"success"

@@ -104,32 +104,14 @@ $(function(){
             });
         }
     });
-    var u = navigator.userAgent;
-    if(u.indexOf('iPhone')>-1) {
-        $.get("/benz/portal/getProblemId/?taskid="+$(".body").data("taskid"),function(d){
-            if(d.status == 'success') {
-                if(d.problemId != $(".num").text()) {
-                    location.href = location.href;
-                }
-            }
-        });        
-    }
-    else {
-        var s = function() {
-            setTimeout(function(){
-                $.get("/benz/backend/getProblemId/",function(d){
-                    if(d.status == 'success') {
-                        if(d.problemId != $(".num").text()) {
-                            location.href = location.href;
-                        }
+        setInterval(function(){
+            
+            $.get("/benz/portal/getProblemId/",function(d){
+                if(d.status == 'success') {
+                    if(d.problemId != $(".num").text()) {
+                        location.href = location.href;
                     }
-                    s();
-
-                });
-                console.log("I do");
-
-            },5000);
-        }
-        s();
-    }
+                }
+            });
+        },5000);
 });

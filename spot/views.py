@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def allowPri(func):
     def _allowPri(request):
-        if request.session.get("spot_user",False) and not request.session.get("spot_allow") :
+        if request.session.get("spot_user",False) :
             if request.session.get("spot_user") == 'root':
                 request.session["spot_allow"] = 'all'
             else:
@@ -46,6 +46,7 @@ def quitAction(request):
             "status":"fail"
         })
     else:
+        request.session["spot_allow"] = ""
         request.session['spot_user'] = ""
         return JsonResponse({
             "status":"success"
@@ -190,7 +191,6 @@ def addTermList(request):
         ulist = ulist.filter(hotPersonJoined=0)
     elif term == 'space-rebuild':
         ulist = ulist.filter(spaceRebuildJoined=0)
-    print ulist
     return render(request, "spot/addTermList.html", {
         'taskid':taskid,
         'term':term,
@@ -205,7 +205,6 @@ def addToTerm(request):
     u = UserTaskProject.objects.get(id=id,register=1,taskid=taskid)
     if term == 'five-can':
         u.fiveCan = 5
-        u.total_score += 5
         u.fiveCanJoined = 1 
     elif term == 'driver-success':
         u.driveSuccessJoined = 1 
@@ -215,26 +214,22 @@ def addToTerm(request):
         u.getFirstJoined = 1 
     elif term == 'little-cource':
         u.littleCource = 1
-        u.total_score += 1
         u.littleCourceJoined = 1 
     elif term == 'perfect-in':
         u.perfectIn = 1
-        u.total_score += 1
         u.perfectInCanJoined = 1 
     elif term == 'option':
         u.option = 1
-        u.total_score += 1
         u.optionJoined = 1 
     elif term == 'big-buy':
         u.bigBuyJoined = 1 
     elif term == 'hot-person':
         u.hotPerson = 2
-        u.total_score += 2
         u.hotPersonJoined = 1 
     elif term == 'space-rebuild':
         u.spaceRebuildJoined = 1
         u.spaceRebuild = 1
-        u.total_score += 1
+    u.total_score = u.littleCource + u.spaceRebuild + u.hotPerson + u.fiveCan + u.option + u.perfectIn + u.getFirst + u.throwMoney + u.bigBuy + u.driveSuccess
     u.save()
     return JsonResponse({
         "status":"success"    
@@ -354,31 +349,15 @@ def addScore(request):
         if term in ['five-can', 'driver-success', 'throw-money', 'big-buy']:
             user = UserTaskProject.objects.filter(id=user_id).first()
             if term == 'driver-success':
-                if user.total_score :
-                    if user.driveSuccess:
-                        user.total_score -= user.driveSuccess
-                    user.total_score += score
-                else :
-                    user.total_score = score
                 user.driveSuccess = score
+                user.driveSuccessJoined = 1
             if term == 'throw-money':
-                print user.total_score
-                if user.total_score :
-                    if user.throwMoney:
-                        user.total_score -= user.throwMoney
-                    user.total_score += score
-                else :
-                    user.total_score = score
                 user.throwMoney = score
+                user.throwMoneyJoined = 1
             if term == 'big-buy':
                 user.bigBuy = score
-                if user.total_score :
-                    if user.bigBuy:
-                        user.total_score -= user.bigBuy
-                    user.total_score += score
-                else :
-                    user.total_score = score
-                user.bigBuy = score
+                user.bigBuyJoined = 1
+            user.total_score = user.littleCource + user.spaceRebuild + user.hotPerson + user.fiveCan + user.option + user.perfectIn + user.getFirst + user.throwMoney + user.bigBuy + user.driveSuccess
             user.save()
             status['success'] = True
     except Exception as e:

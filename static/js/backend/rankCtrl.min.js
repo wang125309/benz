@@ -17,14 +17,16 @@ rankCtrl = app.controller('rankCtrl',['$scope','$http','$q',function($scope,$htt
     $http.get("/benz/backend/getSignWall/?id="+getQueryParams('id',location.href)).success(function(d){
         $scope.users = d;
     });
+    $http.get("/benz/backend/getSignNum/?id="+getQueryParams("id",location.href)).success(function(num){
+        $scope.num = num.num;   
+        console.log($scope.num);
+    });
     setInterval(function(){
         $http.get("/benz/backend/getSignWall/?id="+getQueryParams('id',location.href)).success(function(d){
             users = d;
             flag = false;
             for (i in $scope.users.user) {
                 if ($scope.users.user[i].headimgurl != d.user[i].headimgurl || $scope.users.user[i].nickname != d.user[i].nickname || $scope.users.user[i].id != d.user[i].id) {
-                    console.log($scope.users.user[i]);
-                    console.log(d.user[i]);
                     flag = true;
                 }
             }
@@ -33,7 +35,10 @@ rankCtrl = app.controller('rankCtrl',['$scope','$http','$q',function($scope,$htt
             }
             console.log($scope.users.user);
         });
-        
+        $http.get("/benz/backend/getSignNum/?id="+getQueryParams("id",location.href)).success(function(num){
+            $scope.num = num.num;   
+        console.log($scope.num);
+        });
     },7000);
 }]);
 rankCtrl.$inject = ['$scope','rankCtrl'];

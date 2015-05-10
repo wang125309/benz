@@ -3,7 +3,7 @@ html(lang="en")
     head
         meta(http-equiv="Content-Type",content="text/html",charset="utf-8")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/problem.min.js")
-        link(href="{{ STATIC_URL }}css/backend/problem.css",rel="stylesheet",type="text/css")
+        link(href="/static/css/backend/problem.css",rel="stylesheet",type="text/css")
 body
     input(type="hidden",data-taskid="{{ taskid }}",data-id="{{ id }}",id="id")
     div.time 倒计时:

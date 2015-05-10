@@ -4,16 +4,17 @@ html(lang="en")
         meta(http-equiv="Content-Type",content="text/html",charset="utf-8")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/sign.min.js")
         script(language="javascript",src="{{ STATIC_URL }}js/backend/rankCtrl.min.js")
-        link(href="{{ STATIC_URL }}css/backend/sign.css",rel="stylesheet",type="text/css")
+        link(href="/static/css/backend/sign.css",rel="stylesheet",type="text/css")
 body(ng-app="app")
-    div.left-wall
-        div.wall-text 签到墙
-        div.wall-data(ng-controller="rankCtrl",ng-cloak)
+    div.left-wall(ng-controller="rankCtrl",ng-cloak)
+        div.wall-text 
+        div.wall-data
             div.card.base-infinite.fly(ng-repeat="i in users.user",class="avatar{[{ i.id }]}")
                 div.avatar(style="background:url({[{ i.headimgurl }]})")=""
                 div.nickname {[{ i.nickname }]}
+        div.sign-num(style="color:#fff;width:100%;text-align:center;margin-top:7vh;") 当前签到{[{ num }]}人
     div.right-rank
-        div.rank-text 积分排行榜
+        div.rank-text 
         {% for rankList in rankLists %}
         div.rank
             div.th
@@ -39,4 +40,5 @@ body(ng-app="app")
                    span.total_score {{ i.total_score }}
                 {% endif %}
                 {% endfor %}
+        
         {% endfor %}

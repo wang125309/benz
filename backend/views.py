@@ -5,7 +5,7 @@ import json
 import requests
 from django.conf import settings
 from django.core.cache import cache
-
+import random
 import logging
 from models import *
 from portal.models import User as portalUser
@@ -183,6 +183,13 @@ def userList(request):
         "task":task
     })
 
+def getSignNum(request):
+    id = request.GET['id']
+    u = usertaskProject.objects.filter(taskid=id,clear=0)
+    return JsonResponse({
+        "num":u.count()    
+    })
+
 @loginNeed
 def deleteUser(request):
     if request.GET.get("id",False):
@@ -263,7 +270,7 @@ def setProblemId(request):
     if not cache.get("problemId"+taskid):
         cache.set("problemId"+taskid,1,settings.NEVER_REDIS_TIMEOUT)
     else :
-        if int(cache.get("problemId"+taskid)) < 43:
+        if int(cache.get("problemId"+taskid)) < 55:
             cache.set("problemId"+taskid,cache.get("problemId"+taskid)+1,settings.NEVER_REDIS_TIMEOUT)
         else :
             cache.set("problemId"+taskid,1,settings.NEVER_REDIS_TIMEOUT)
@@ -409,6 +416,9 @@ def sign_rank(request):
 def getSignWall(request):
     user = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0).exclude(register=1).order_by("-id")[0:20]
     userall = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0)
+    if len(userall) > 40:
+        r = int(random.random()*30+10)
+        user = usertaskProject.objects.all().filter(taskid=request.GET['id'],clear=0).exclude(register=1).order_by("-id")[r:r+20]
     users = []
     cnt = 0
     for i in user:

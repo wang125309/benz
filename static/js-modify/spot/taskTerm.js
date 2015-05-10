@@ -58,13 +58,22 @@ $(function(){
         var scoreAdd = $('.scoreAdd');
         var score ='';
         var id = '';
+        var code = '';
         if($(e.target).parent('.user-tr').length){
             id = $(e.target).parent('.user-tr').data('id');
+            code = $(e.target).parent('.user-tr').data('code');
             score = $(e.target).parent('.user-tr').data('score');
         }
+
         if(!id)return;
         if(id)scoreAdd.data('id', id);
         if(score)scoreAdd.data('score', score);
+        if(code)scoreAdd.data('code', code);
+
+        if(code) {
+            $(".code").html(code);
+        
+        }
         if(typeof(score)!="undefined")$('#score').val(score);
         scoreAdd.show();
     });
@@ -78,7 +87,8 @@ $(function(){
          var id = scoreAdd.data('id');
          var score = scoreAdd.data('score');
          var term = scoreAdd.data('term');
-
+        var code =scoreAdd.data('code');
+        $(".code").html(code);
          if(!id)return;
          if(score == score_input.val())return;
          score = score_input.val();

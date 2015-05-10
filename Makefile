@@ -1,5 +1,5 @@
 host:=0.0.0.0
-port:=8989
+port:=8808
 activate_venv = source venv/bin/activate
 
 debug:

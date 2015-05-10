@@ -5,14 +5,14 @@ require("./wx_plugin.js");
 window.onload = function() {
     document.addEventListener('touchmove', function (event) {
             event.preventDefault();
-            }, false);
-    $(".bottom-banner-view").velocity("fadeIn",function(){
+        }, false);
+        $(".bottom-banner-view").velocity("fadeIn",function(){
             setTimeout(function(){
                 $(".bottom-banner-view").velocity("fadeOut",function(){
                     $(".bottom-banner-view-text").velocity("fadeIn");
                     });        
                 },2000);
-            });
+    });
     w = $(window).width();
     h = $(window).height();
     p = location.href.substring(location.href.indexOf("#")+1);
@@ -20,16 +20,16 @@ window.onload = function() {
     if(p == 'instruction') {
             $(".page2").css({
                 "top":"0"
-                });
+            });
             $(".page1").css({
                 "top":"-"+h+"px"
-                });
+            });
             $(".page3").css({
                 "top":h+"px"
-                });
+            });
             $(".page4").css({
                 "top":2*h+"px"
-                });
+            });
             active = 2;
             $(".title").velocity("fadeIn");
     

@@ -1,26 +1,41 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 $ = require("../../../bower_components/jquery/dist/jquery.js");
-
 $(function(){
-    $.get("/benz/backend/getProblemId/?taskid="+$("#id").data("taskid"),function(d){
-        console.log(d.problemId);
-        if(d.problemId != $("#id").data("id")) {
-            location.href = location.href; 
-        }
-        else {
-            setInterval(function(){
-                $(".s"+$(".num").html()).css({
-                    "background":"#1f1f1f"
-                });
-                $(".num").html($(".num").html()-1);
-                if($(".num").html() <= '0') {
-                    $.get("/benz/backend/setProblemId/?taskid="+$("#id").data("taskid"),function(){
-                        location.href = location.href;
-                    });
-                }
-            },1000);
-         }
-    }); 
+    h = $(window).height();
+    w = $(window).width();
+    ph = (h-100)/30;
+    function getQueryParams(name,url) {
+        if(!url)url = location.href;
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+         var regexS = "[\\?&]"+name+"=([^&#]*)";
+         var regex = new RegExp( regexS );
+         var results = regex.exec( url );
+         return results == null ? null : results[1];
+    };
+    res = {};
+    $.get('/benz/backend/getSignWall/?id='+getQueryParams("id",location.href),function(result){
+        res = result;
+    },"json");
+    var auto_refresh = function(){
+        $.get('/benz/backend/sign/?id='+getQueryParams("id",location.href), function(result){
+            $(".right-rank").html($($(result)[5]).html());
+        }, "html");
+    }
+
+    var _time_refresh = function(){
+        setTimeout(function(){
+            auto_refresh();
+            _time_refresh();
+        }, 7000)
+    }
+    
+    var _time_out = function(){
+        setTimeout(function(){
+            _time_out();
+        }, 5000);
+    }
+    _time_out();
+    _time_refresh();
 });
 
 },{"../../../bower_components/jquery/dist/jquery.js":2}],2:[function(require,module,exports){
@@ -9230,18 +9245,7 @@ return jQuery;
 
 }));
 
-},{}]},{},[1])ody[ "scroll" + name ], doc[ "scroll" + name ],
-						elem.body[ "offset" + name ], doc[ "offset" + name ],
-						doc[ "client" + name ]
-					);
-				}
-
-				return value === undefined ?
-					// Get width or height on the element, requesting but not forcing parseFloat
-					jQuery.css( elem, type, extra ) :
-
-					// Set width or height on the element
-					jQuery.style( elem, type, value, extra );
+},{}]},{},[1])ery.style( elem, type, value, extra );
 			}, type, chainable ? margin : undefined, chainable, null );
 		};
 	});

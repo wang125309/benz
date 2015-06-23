@@ -135,9 +135,9 @@ def taskTerm(request):
         if term == 'big-buy':
             userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, bigBuyJoined=1)
         if term == 'hot-person':
-            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, throwMoneyJoined=1)
+            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, hotPersonJoined=1)
         if term == 'space-rebuild':
-            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, throwMoneyJoined=1)
+            userListObjects = UserTaskProject.objects.all().filter(taskid=task_id, spaceRebuildJoined=1)
             userListObjects = []
         userListObjects = userListObjects.order_by("giveNum")
         for userListObject in userListObjects:
@@ -211,6 +211,7 @@ def addToTerm(request):
     elif term == 'throw-money':
         u.throwMoneyJoined = 1 
     elif term == 'get-first':
+        u.getFirst= 2 
         u.getFirstJoined = 1 
     elif term == 'little-cource':
         u.littleCource = 1
@@ -229,6 +230,26 @@ def addToTerm(request):
     elif term == 'space-rebuild':
         u.spaceRebuildJoined = 1
         u.spaceRebuild = 1
+    if not u.littleCource :
+        u.littleCource = 0
+    if not u.spaceRebuild :
+        u.spaceRebuild = 0
+    if not u.hotPerson:
+        u.hotPerson = 0
+    if not u.fiveCan :
+        u.fiveCan = 0
+    if not u.option :
+        u.option = 0
+    if not u.perfectIn:
+        u.perfectIn = 0
+    if not u.getFirst :
+        u.getFirst = 0
+    if not u.throwMoney :
+        u.throwMoney = 0
+    if not u.bigBuy :
+        u.bigBuy = 0
+    if not u.driveSuccess:
+        u.driveSuccess = 0
     u.total_score = u.littleCource + u.spaceRebuild + u.hotPerson + u.fiveCan + u.option + u.perfectIn + u.getFirst + u.throwMoney + u.bigBuy + u.driveSuccess
     u.save()
     return JsonResponse({

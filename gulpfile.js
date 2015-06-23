@@ -98,7 +98,7 @@ gulp.task('js-spot', function(){
     }
 });
 
-var js_files_backend = ['sign', 'rankCtrl'];
+var js_files_backend = ['sign', 'rankCtrl','taskList'];
 gulp.task('js-backend', function(){
     for(i in js_files_backend){
     gulp.src('./assets/js-modify/backend/'+ js_files_backend[i]+'.js')

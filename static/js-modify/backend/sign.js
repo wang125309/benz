@@ -12,11 +12,20 @@ $(function(){
          return results == null ? null : results[1];
     };
     res = {};
+    var type = 1;
     $.get('/benz/backend/getSignWall/?id='+getQueryParams("id",location.href),function(result){
         res = result;
     },"json");
+    setInterval(function(){
+        if (type==1) {
+            type = 2;
+        }
+        else {
+            type = 1;
+        }
+    },20000);
     var auto_refresh = function(){
-        $.get('/benz/backend/sign/?id='+getQueryParams("id",location.href), function(result){
+        $.get('/benz/backend/sign/?id='+getQueryParams("id",location.href)+'&type='+type, function(result){
             $(".right-rank").html($($(result)[5]).html());
         }, "html");
     }

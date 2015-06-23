@@ -53,6 +53,15 @@ $(function(){
             }
         }); 
     });
+    $(".export").on("click",function(){
+
+        $.get("/benz/backend/export/?id="+$(this).data("id"),function(d){
+            if(d.status == 'success') {
+                alert("浏览器可能会拦截您的文件下载请求，请打开拦截自动下载，或者手动打开如下链接 http://benz.wxpages.com"+d.file);
+                window.open(d.file);    
+            }
+        });    
+    });
     $(".save").on("click",function(){
         if(!saved) {
             $.post("/benz/backend/saveTask/?id="+edit_id,{

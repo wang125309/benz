@@ -13,8 +13,9 @@ from portal.models import UserTaskProject as usertaskProject
 import datetime
 import sys
 import time
+import xlwt 
 reload(sys)
-sys.setdefaultencoding('UTF-8')
+sys.setdefaultencoding('utf8')
 
 # Create your views here.
 
@@ -185,7 +186,7 @@ def userList(request):
 
 def getSignNum(request):
     id = request.GET['id']
-    u = usertaskProject.objects.filter(taskid=id,clear=0)
+    u = usertaskProject.objects.filter(taskid=id).exclude(clear=1)
     return JsonResponse({
         "num":u.count()    
     })
@@ -363,17 +364,47 @@ def sign(request):
             rank_list.append(rank)
         return rank_list
     try:
-        rank_users = usertaskProject.objects.all().filter(taskid=request.GET['id']).order_by("-total_score").exclude(clear=1)[0:60]
-        rank_first = get_rank_list(rank_users[:30])
-        if rank_first:
-            rank_lists.append(rank_first)
-        rank_second = get_rank_list(rank_users[30:])
-        for i in xrange(len(rank_second)):
-            rank_second[i]['rank'] += 30
-        if rank_second:
-            rank_lists.append(rank_second)
+        if request.GET.get('type',False):
+            l = len(usertaskProject.objects.all().filter(taskid=request.GET['id']).order_by("-total_score").exclude(clear=1))
+            logger.debug(l)
+            if request.GET.get('type') == '1' or l < 60:
+                rank_users = usertaskProject.objects.all().filter(taskid=request.GET['id']).order_by("-total_score").exclude(clear=1)[0:60]
+                rank_first = get_rank_list(rank_users[:30])
+                if rank_first:
+                    rank_lists.append(rank_first)
+                rank_second = get_rank_list(rank_users[30:])
+                for i in xrange(len(rank_second)):
+                    rank_second[i]['rank'] += 30
+                if rank_second:
+                    rank_lists.append(rank_second)
+            else :
+                rank_users = usertaskProject.objects.all().filter(taskid=request.GET['id']).order_by("-total_score").exclude(clear=1)[60:120]
+
+                rank_first = get_rank_list(rank_users[0:30])
+                logger.debug(rank_first)
+                for i in xrange(len(rank_first)):
+                    rank_first[i]['rank'] += 60 
+                if rank_first:
+                    rank_lists.append(rank_first)
+                rank_second = get_rank_list(rank_users[30:60])
+                for i in xrange(len(rank_second)):
+                    rank_second[i]['rank'] += 90
+                if rank_second:
+                    rank_lists.append(rank_second)
+                logger.debug(rank_lists)
+        else:
+            rank_users = usertaskProject.objects.all().filter(taskid=request.GET['id']).order_by("-total_score").exclude(clear=1)[0:60]
+            rank_first = get_rank_list(rank_users[:30])
+            if rank_first:
+                rank_lists.append(rank_first)
+            rank_second = get_rank_list(rank_users[30:])
+            for i in xrange(len(rank_second)):
+                rank_second[i]['rank'] += 30
+            if rank_second:
+                rank_lists.append(rank_second)
     except Exception as e:
         print str(e)
+
     return render(request,"backend/sign.html",{
         "user": users,
         "rankLists": rank_lists
@@ -431,6 +462,42 @@ def getSignWall(request):
     return JsonResponse({
         "user": users,
     })
+
+@loginNeed
+def export(request):
+    taskid = request.GET.get("id")
+    u = usertaskProject.objects.all().filter(taskid=taskid)
+    task = Task.objects.get(id = taskid)
+    fname = "static/" + taskid  + "-data" + ".xls"
+    file = xlwt.Workbook()
+    table = file.add_sheet('active',cell_overwrite_ok=True)
+    table.write(0,0,'id')
+    table.write(0,1,u'昵称')
+    table.write(0,2,u'分配号')
+    table.write(0,3,u'总积分')
+    table.write(0,4,u'手机号')
+    table.write(0,5,u'姓名')
+    table.write(0,6,u'创建时间')
+    line = 1
+    for i in u:
+        table.write(line,0,i.id)
+        table.write(line,1,i.nickname)
+        table.write(line,2,i.giveNum)
+        table.write(line,3,i.total_score)
+        table.write(line,4,i.phone)
+
+        if cache.get(i.openid):
+            table.write(line,5,json.loads(cache.get(i.openid)).get('username'))
+        if cache.get(i.openid):
+            u = portalUser.objects.get(openid = i.openid)
+            table.write(line,6,time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(u.dateline))))
+        line += 1
+    file.save(fname)
+    return JsonResponse({
+        "status":"success",
+        "file":"/"+fname
+    })
+
 
 @loginNeed
 def clear(request):

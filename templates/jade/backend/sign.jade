@@ -12,7 +12,7 @@ body(ng-app="app")
             div.card.base-infinite.fly(ng-repeat="i in users.user",class="avatar{[{ i.id }]}")
                 div.avatar(style="background:url({[{ i.headimgurl }]})")=""
                 div.nickname {[{ i.nickname }]}
-        div.sign-num(style="color:#fff;width:100%;text-align:center;margin-top:7vh;") 当前签到{[{ num }]}人
+        div.sign-num(style="color:#fff;width:100%;text-align:center;margin-top:15vh;") 当前签到{[{ num }]}人
     div.right-rank
         div.rank-text 
         {% for rankList in rankLists %}
